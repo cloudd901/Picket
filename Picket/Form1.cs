@@ -24,7 +24,7 @@ namespace Picket
         {
             InitializeComponent();
 
-            DirectoryInfo di = new DirectoryInfo(@"C:\Users\de8808\source\repos\The Pick\The Pick\resources");
+            DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory() + @"\plugins\");
             di.GetFiles("*.dll");
             foreach (FileInfo f in di.GetFiles("*.dll"))
             {
