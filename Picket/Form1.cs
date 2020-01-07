@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using Timer = System.Timers.Timer;
@@ -23,6 +19,7 @@ namespace Picket
         private PowerType PT { get; set; } = PowerType.Random;
         private MyReflection.ReflectionData Instance { get; set; }
         private List<AssemblyName> AssList { get; } = new List<AssemblyName>();
+
         public Form1()
         {
             InitializeComponent();
@@ -32,14 +29,12 @@ namespace Picket
             foreach (FileInfo f in di.GetFiles("*.dll"))
             {
                 AssList.Add(AssemblyName.GetAssemblyName(f.FullName));
-                ToolStripMenuItem item = new ToolStripMenuItem(AssList.Last().Name, null, SetAssembly, AssList.Last().Name);
+                ToolStripMenuItem item = new ToolStripMenuItem(AssList.Last().Name, null, LoadAssembly, AssList.Last().Name);
                 pluginToolStripMenuItem.DropDownItems.Add(item);
             }
-            Assembly assembly = Assembly.Load(AssList.FirstOrDefault(x => x.Name.Contains("Wheel")));
-            LoadAssembly(assembly);
             TrackBar1_Scroll(null, null);
             button4.BackColor = ColorRandom();
-            
+            ButtonStates(false);
         }
 
         #region Assembly
@@ -72,16 +67,21 @@ namespace Picket
                 }
                 Instance.Methods.EntriesClear.Invoke(Instance.iRandomInstance, null);
                 Instance = null;
+                label3.Visible = true;
+                label1.Text = "";
+                label1.BackColor = Color.Snow;
+                progressBar1.Value = 0;
+                ButtonStates(false);
             }
         }// Clear assembly settings and dispose of plugin
-        private void SetAssembly(object sender, EventArgs e)
+        private void LoadAssembly(object sender, EventArgs e)
         {
+
             Assembly assembly = Assembly.Load(AssList.FirstOrDefault(x => x.Name == ((ToolStripMenuItem)sender).Name));
-            LoadAssembly(assembly);
-        }// Set Assembly by name
-        private void LoadAssembly(Assembly assembly)
-        {
+
             ClearAssembly();
+            label3.Visible = false;
+            ButtonStates(true);
 
             Instance = new MyReflection(this, assembly).Instance;
 
@@ -90,10 +90,21 @@ namespace Picket
             Instance.ToolProperties.TextToShow.SetValue(Instance.ToolPropertiesObj, (int)TextType.Name);
             Instance.Properties.AllowExceptions.SetValue(Instance.iRandomInstance, false);
 
-            Instance.Methods.Draw.Invoke(Instance.iRandomInstance, new object[] { 15, 30, 150 });
-
             UpdateEntryList();
+
+            Instance.Methods.Draw.Invoke(Instance.iRandomInstance, new object[] { 15, 30, 150 });
         }// Load Assembly and initial settings.
+        private void ButtonStates(bool state = true)
+        {
+            button1.Enabled = state;
+            button2.Enabled = state;
+            if (!state)
+            {
+                button5.Enabled = state;
+                button6.Enabled = state;
+            }//do not default enable
+            button7.Enabled = state;
+        }
         #endregion
 
         #region Events
@@ -166,12 +177,12 @@ namespace Picket
                     {
                         listView1.Invoke((MethodInvoker)delegate
                         {
-                            ReverseLoadListView();
+                            ReverseUpdateEntryList();
                         });
                     }
                     else
                     {
-                        ReverseLoadListView();
+                        ReverseUpdateEntryList();
                     }
                 }
                 catch
@@ -180,23 +191,27 @@ namespace Picket
                 ReverseListUpdateTimer_Clear();
             }
         }
-        private void ReverseLoadListView()
+        private void ReverseUpdateEntryList()
         {
             var entryList = CallEntryList();
             if (entryList == null) { return; }
             listView1.Items.Clear();
 
+            object[] readColors = new object[2] { null, null };
+            string[] listItem = new string[2] { null, null };
+
             foreach (dynamic entry in entryList)
             {
                 Color c1 = entry.Aura;
                 Color c2 = Color.Black;
-                bool check = Convert.ToBoolean(Instance.Methods.IsReadable.Invoke(Instance.iRandomInstance, new object[] { c1, c2 }));
+                readColors[0] = c1; readColors[1] = c2;
+                bool check = Convert.ToBoolean(Instance.Methods.IsReadable.Invoke(Instance.iRandomInstance, readColors));
                 if (!check) { c2 = Color.White; }
 
                 string name = entry.Name;
                 int cnt = 1;
 
-                ListViewItem item = listView1.FindItemWithText(name);
+                ListViewItem item = ListViewTryFindText(listView1, name);
                 if (item != null)
                 {
                     int loc = listView1.Items.IndexOf(item);
@@ -209,7 +224,8 @@ namespace Picket
                 }
                 else
                 {
-                    listView1.Items.Add(new ListViewItem(new string[] { name, cnt.ToString() }, 0, c2, c1, default));
+                    listItem[0] = name; listItem[1] = cnt.ToString();
+                    listView1.Items.Add(new ListViewItem(listItem, 0, c2, c1, default));
                     TextBox1_TextChanged(null, null);
                 }
             }
@@ -222,16 +238,22 @@ namespace Picket
         }
         private void UpdateEntryList()
         {
-            Instance.Methods.EntriesClear.Invoke(Instance.iRandomInstance, new object[] { });
-            foreach (ListViewItem item in listView1.Items)
+            if (Instance != null)
             {
-                int cnt = int.Parse(item.SubItems[1].Text);
-                for (int i = 0; i < cnt; i++)
+                object[] nullObj = new object[] { };
+                object[] entry = new object[1] { null };
+                Instance.Methods.EntriesClear.Invoke(Instance.iRandomInstance, nullObj);
+                foreach (ListViewItem item in listView1.Items)
                 {
-                    Instance.Methods.EntryAdd.Invoke(Instance.iRandomInstance, new object[] { NewEntry(item.Text, item.BackColor) });
+                    int cnt = int.Parse(item.SubItems[1].Text);
+                    for (int i = 0; i < cnt; i++)
+                    {
+                        entry[0] = NewEntry(item.Text, item.BackColor);
+                        Instance.Methods.EntryAdd.Invoke(Instance.iRandomInstance, entry);
+                    }
                 }
+                Instance.Methods.Refresh.Invoke(Instance.iRandomInstance, nullObj);
             }
-            Instance.Methods.Refresh.Invoke(Instance.iRandomInstance, new object[] { });
         }
         public object NewEntry(string s, Color c, int id = -1)
         {
@@ -246,11 +268,11 @@ namespace Picket
         }
         #endregion
 
-        #region GUI Clicks
+        #region Button Clicks
         private void Button1_Click(object sender, EventArgs e)
         {
             progressBar1.Value = 0;
-            ActionThread = new Thread(() => { Instance.Methods.Start.Invoke(Instance.iRandomInstance, new object[] { (int)Direction.Clockwise, (int)PT, 5 }); });
+            ActionThread = new Thread(() => { try { Instance.Methods.Start.Invoke(Instance.iRandomInstance, new object[] { (int)Direction.Clockwise, (int)PT, 5 }); } catch { } });
             ActionThread.Start();
         }// Start
         private void Button2_Click(object sender, EventArgs e)
@@ -261,13 +283,15 @@ namespace Picket
         {
             Color c1 = button4.BackColor;
             Color c2 = Color.Black;
-            bool check = Convert.ToBoolean(Instance.Methods.IsReadable.Invoke(Instance.iRandomInstance, new object[] { c1, c2 }));
-            if (!check) { c2 = Color.White; }
-
+            if (Instance != null)
+            {
+                bool check = Convert.ToBoolean(Instance.Methods.IsReadable.Invoke(Instance.iRandomInstance, new object[] { c1, c2 }));
+                if (!check) { c2 = Color.White; }
+            }
             string name = textBox1.Text.Trim();
             int cnt = (int)numericUpDown1.Value;
 
-            ListViewItem item = listView1.FindItemWithText(name);
+            ListViewItem item = ListViewTryFindText(listView1, name);
             if (item != null)
             {
                 int loc = listView1.Items.IndexOf(item);
@@ -303,7 +327,7 @@ namespace Picket
             string name = textBox1.Text.Trim();
             int cnt = 0;// (int)numericUpDown1.Value;
 
-            ListViewItem item = listView1.FindItemWithText(name);
+            ListViewItem item = ListViewTryFindText(listView1, name);
             if (item != null)
             {
                 int loc = listView1.Items.IndexOf(item);
@@ -326,7 +350,7 @@ namespace Picket
             string name = textBox1.Text.Trim();
             int cnt = (int)numericUpDown1.Value;
 
-            ListViewItem item = listView1.FindItemWithText(name, true, 0, false);
+            ListViewItem item = ListViewTryFindText(listView1, name);
             if (item != null)
             {
                 int loc = listView1.Items.IndexOf(item);
@@ -347,7 +371,7 @@ namespace Picket
         private void Button7_Click(object sender, EventArgs e)
         {
             Instance.Methods.ShuffleEntries.Invoke(Instance.iRandomInstance, new object[] { });
-            ReverseLoadListView();
+            ReverseUpdateEntryList();
             Instance.Methods.Draw.Invoke(Instance.iRandomInstance, new object[] { 15, 30, 150 });
         }// Shuffle
         private void ListView1_DoubleClick(object sender, EventArgs e)
@@ -357,6 +381,34 @@ namespace Picket
             try { numericUpDown1.Value = int.Parse(item.SubItems[1].Text); } catch { }
             button4.BackColor = item.BackColor;
         }
+        private void ListView1_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            ListViewColumnSorter columnSorter = (ListViewColumnSorter)listView1.ListViewItemSorter;
+            if (columnSorter == null) { columnSorter = new ListViewColumnSorter(); }
+
+            if (e.Column == columnSorter.SortColumn)
+            {
+                if (columnSorter.Order == SortOrder.Ascending)
+                {
+                    columnSorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    columnSorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                columnSorter.SortColumn = e.Column;
+                columnSorter.Order = SortOrder.Ascending;
+            }
+            listView1.ListViewItemSorter = columnSorter;
+            listView1.Sort();
+            UpdateEntryList();
+        }
+        #endregion
+
+        #region ToolStrip Clicks
         private void AboutToolStripMenuItem1_Click(object sender, EventArgs e)
         {
 
@@ -364,6 +416,26 @@ namespace Picket
         private void CloseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
+        }
+        private void ClearPluginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearAssembly();
+            if (ActionThread != null && ActionThread.IsAlive) { ActionThread.Abort(); ActionThread.Join(); }
+        }
+        private void ClearTicketListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listView1.Items.Clear();
+            if (Instance != null)
+            {
+                Instance.Methods.EntriesClear.Invoke(Instance.iRandomInstance, new object[] { });
+                Instance.Methods.Refresh.Invoke(Instance.iRandomInstance, new object[] { });
+            }
+        }
+        private void ClearAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearPluginToolStripMenuItem_Click(null, null);
+            ClearTicketListToolStripMenuItem_Click(null, null);
+            textBox1.Text = "";
         }
         #endregion
 
@@ -385,18 +457,20 @@ namespace Picket
                 }
                 else
                 { perc = i; }
-
+                if (perc < 0) { perc *= -1; }
                 progressBar1.Value = perc;
                 progressBar1.Update();
             }
         }
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
-            ListViewItem item = listView1.FindItemWithText(textBox1.Text, true, 0, false);
+            ListViewItem item = ListViewTryFindText(listView1, textBox1.Text);
+
             if (item != null)
             {
                 button5.Enabled = true;
                 button6.Enabled = true;
+                button4.BackColor = item.BackColor;
             }
             else
             {
@@ -432,7 +506,12 @@ namespace Picket
             else if (trackBar1.Value >= 0)
             { lbl_0.ForeColor = c1; PT = PowerType.Weak; }
         }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ClearPluginToolStripMenuItem_Click(null, null);
+        }
         #endregion
+
 
         public object GetPropValue(object src, string propName)
         {
@@ -451,11 +530,15 @@ namespace Picket
             return Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private ListViewItem ListViewTryFindText(ListView listView, string text)
         {
-            ClearAssembly();
-            if (ActionThread.IsAlive) { ActionThread.Abort(); ActionThread.Join(); }
+            ListViewItem item = null;
+            if (listView.Items.Count > 0)
+            { item = listView.FindItemWithText(text, true, 0, false); }
+            return item;
         }
+
+        
     }
 
 }
