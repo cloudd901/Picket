@@ -13,7 +13,9 @@ namespace Picket
 {
     public partial class Form1 : Form
     {
-        readonly object _timerLock = new object();
+        readonly object _lock1 = new object();
+        readonly object _lock2 = new object();
+        private bool StopCalledFlag = false;
         private Thread ActionThread { get; set; }
         private Timer ReverseListTimer { get; set; }
         private PowerType PT { get; set; } = PowerType.Random;
@@ -23,7 +25,7 @@ namespace Picket
         public Form1()
         {
             InitializeComponent();
-
+            ListViewSetGUI();
             DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory() + @"\plugins\");
             di.GetFiles("*.dll");
             foreach (FileInfo f in di.GetFiles("*.dll"))
@@ -108,45 +110,137 @@ namespace Picket
         #endregion
 
         #region Events
+        private void TryContinueSpin()
+        {
+            if (checkBox1.Checked && (radioButton1.Checked || (radioButton2.Checked && numericUpDown2.Value > 0)))
+            {
+                if (radioButton2.Checked && numericUpDown2.Value > 0)
+                { numericUpDown2.Value--; }
+
+                if (radioButton2.Checked && numericUpDown2.Value == 0)
+                { return; }
+
+                if (listView1.Items.Count > 0)
+                {
+                    Button1_Click(null, null);
+                }
+
+            }
+        }
         private void EventStopCall(object entry)
         {
-            DoEventAction(entry, null, 100);
+            Invoke((MethodInvoker)delegate
+            { DoEventAction(entry, null, 100); });
+
+            // Create delay for effect
+            Timer StopEntryTimer = new Timer();
+            StopEntryTimer.Elapsed += (sender, e) => EventStopCallDelay(sender, e, entry);
+            StopEntryTimer.AutoReset = false;
+            StopEntryTimer.Interval = 1000;
+            StopEntryTimer.Start();
+        }
+
+        private void EventStopCallDelay(object sender, ElapsedEventArgs e, object entry)
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                if (PT == PowerType.Infinite || !StopCalledFlag)
+                {
+                    MoveEntryEvent(entry);
+                    TryContinueSpin();
+                }
+            });
+
+            StopCalledFlag = false;
         }
         private void EventActionCall(object entry, string[] actionInfo)
         {
-            DoEventAction(entry, actionInfo);
-            
+            if (!StopCalledFlag)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    DoEventAction(entry, actionInfo);
+                });
+            }
         }
         private void DoEventAction(object entry, string[] actionInfo, int progressBar = -1)
         {
             ReverseListUpdateTimer_Set();
 
-            try
+            lock (_lock2)
             {
-                if (label1.InvokeRequired)
-                {
-                    label1.Invoke((MethodInvoker)delegate
-                    {
-                        label1.Text = $"{ GetPropValue(entry, "Name") }";
-                        label1.BackColor = (Color)GetPropValue(entry, "Aura");
-                        label1.Refresh();
-                        ProgressUpdate(actionInfo, progressBar);
-                    });
-                }
-                else
-                {
-                    label1.Text = $"{ GetPropValue(entry, "Name") }";
-                    label1.BackColor = (Color)GetPropValue(entry, "Aura");
-                    label1.Refresh();
-                    ProgressUpdate(actionInfo, progressBar);
-                }
+                label1.Text = $"{ GetPropValue(entry, "Name") }";
+                label1.BackColor = (Color)GetPropValue(entry, "Aura");
+                label1.Refresh();
+                ProgressUpdate(actionInfo, progressBar);
             }
-            catch
-            { }
+        }
+        public void MoveEntryEvent(object entry)
+        {
+            string name = GetPropValue(entry, "Name").ToString();
+            ListViewItem pickedItem = ListViewTryFindText(listView1, name);
+            int loc = listView1.Items.IndexOf(pickedItem);
+            int countLV2 = listView2.Items.Count + 1;
+            int countLV3 = listView3.Items.Count + 1;
+            if (moveWinningTicketToolStripMenuItem.Checked)
+            {
+                int tktCount;
+                int.TryParse(listView1.Items[loc].SubItems[1].Text, out tktCount);
+                tktCount--;
+                if (tktCount == 0) { listView1.Items[loc].Remove(); }
+                else { listView1.Items[loc].SubItems[1].Text = tktCount.ToString(); }
+
+                listView2.Items.Add(new ListViewItem(new string[] { name, countLV2.ToString() }, 0, pickedItem.ForeColor, pickedItem.BackColor, default));
+                UpdateEntryList();
+            }
+            listView3.Items.Add(new ListViewItem(new string[] { name, countLV3.ToString() }, 0, pickedItem.ForeColor, pickedItem.BackColor, default));
         }
         #endregion
 
         #region ListUpdate
+        private void ListView1_Update_Ticket(TicketUpdateType ticketUpdateType = TicketUpdateType.Add, string name = null, int newcnt = -1, Color? backColor = null, Color? foreColor = null)
+        {
+            backColor = backColor ?? button4.BackColor;
+            foreColor = foreColor ?? Color.Black;
+            name = name ?? textBox1.Text.Trim();
+            if (newcnt == -1) { newcnt = (int)numericUpDown1.Value; }
+
+            if (Instance != null)
+            {
+                bool check = Convert.ToBoolean(Instance.Methods.IsReadable.Invoke(Instance.iRandomInstance, new object[] { backColor, foreColor }));
+                if (!check) { foreColor = Color.White; }
+            }
+
+            ListViewItem item = ListViewTryFindText(listView1, name);
+            if (item != null)
+            {
+                int cnt;
+                int loc = listView1.Items.IndexOf(item);
+                int.TryParse(listView1.Items[loc].SubItems[1].Text, out cnt);
+                if (ticketUpdateType == TicketUpdateType.Add) { cnt += newcnt; }
+                else if (ticketUpdateType == TicketUpdateType.Subtract) { cnt -= newcnt; }
+                else if (ticketUpdateType == TicketUpdateType.Update) { cnt = newcnt; }
+
+                listView1.Items[loc].SubItems[1].Text = cnt.ToString();
+                listView1.Items[loc].BackColor = (Color)backColor;
+                listView1.Items[loc].ForeColor = (Color)foreColor;
+            }
+            else
+            {
+                listView1.Items.Add(new ListViewItem(new string[] { name, newcnt.ToString() }, 0, (Color)foreColor, (Color)backColor, default));
+                TextBox1_TextChanged(null, null);
+            }
+            UpdateEntryList();
+        }
+        private ListViewItem ListViewTryFindText(ListView listView, string text)
+        {
+            ListViewItem item = null;
+            if (listView.Items.Count > 0)
+            {
+                item = listView.FindItemWithText(text, true, 0, false);
+            }
+            return item;
+        }
         private void ReverseListUpdateTimer_Set()
         {
             if (ReverseListTimer == null)
@@ -169,7 +263,7 @@ namespace Picket
         }
         private void ReverseListUpdateTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            lock (_timerLock)
+            lock (_lock1)
             {
                 try
                 {
@@ -273,41 +367,25 @@ namespace Picket
         {
             progressBar1.Value = 0;
             ActionThread = new Thread(() => { try { Instance.Methods.Start.Invoke(Instance.iRandomInstance, new object[] { (int)Direction.Clockwise, (int)PT, 5 }); } catch { } });
+            ActionThread.SetApartmentState(ApartmentState.MTA);
             ActionThread.Start();
         }// Start
         private void Button2_Click(object sender, EventArgs e)
         {
-            Instance.Methods.Stop.Invoke(Instance.iRandomInstance, null);
+            bool check = Convert.ToBoolean(Instance.Properties.IsBusy.GetValue(Instance.iRandomInstance));
+            if (check)
+            {
+                StopCalledFlag = true;
+
+                ReverseListUpdateTimer_Clear();
+                if (PT != PowerType.Infinite) { checkBox1.Checked = false; }
+
+                Instance.Methods.Stop.Invoke(Instance.iRandomInstance, null);
+            }
         }// Stop
         private void Button3_Click(object sender, EventArgs e)
         {
-            Color c1 = button4.BackColor;
-            Color c2 = Color.Black;
-            if (Instance != null)
-            {
-                bool check = Convert.ToBoolean(Instance.Methods.IsReadable.Invoke(Instance.iRandomInstance, new object[] { c1, c2 }));
-                if (!check) { c2 = Color.White; }
-            }
-            string name = textBox1.Text.Trim();
-            int cnt = (int)numericUpDown1.Value;
-
-            ListViewItem item = ListViewTryFindText(listView1, name);
-            if (item != null)
-            {
-                int loc = listView1.Items.IndexOf(item);
-                int.TryParse(listView1.Items[loc].SubItems[1].Text, out cnt);
-                cnt += (int)numericUpDown1.Value;
-
-                listView1.Items[loc].SubItems[1].Text = cnt.ToString();
-                listView1.Items[loc].BackColor = c1;
-                listView1.Items[loc].ForeColor = c2;
-            }
-            else
-            {
-                listView1.Items.Add(new ListViewItem(new string[] { name, cnt.ToString() }, 0, c2, c1, default));
-                TextBox1_TextChanged(null, null);
-            }
-            UpdateEntryList();
+            ListView1_Update_Ticket(TicketUpdateType.Add);
         }// Add
         private void Button4_Click(object sender, EventArgs e)
         {
@@ -319,54 +397,11 @@ namespace Picket
         }// ColorBox
         private void Button5_Click(object sender, EventArgs e)
         {
-            Color c1 = button4.BackColor;
-            Color c2 = Color.Black;
-            bool check = Convert.ToBoolean(Instance.Methods.IsReadable.Invoke(Instance.iRandomInstance, new object[] { c1, c2 }));
-            if (!check) { c2 = Color.White; }
-
-            string name = textBox1.Text.Trim();
-            int cnt = 0;// (int)numericUpDown1.Value;
-
-            ListViewItem item = ListViewTryFindText(listView1, name);
-            if (item != null)
-            {
-                int loc = listView1.Items.IndexOf(item);
-                int.TryParse(listView1.Items[loc].SubItems[1].Text, out cnt);
-                cnt = (int)numericUpDown1.Value;
-
-                listView1.Items[loc].SubItems[1].Text = cnt.ToString();
-                listView1.Items[loc].BackColor = c1;
-                listView1.Items[loc].ForeColor = c2;
-            }
-            else
-            {
-                listView1.Items.Add(new ListViewItem(new string[] { name, cnt.ToString() }, 0, c2, c1, default));
-                TextBox1_TextChanged(null, null);
-            }
-            UpdateEntryList();
+            ListView1_Update_Ticket(TicketUpdateType.Update);
         }// Update
         private void Button6_Click(object sender, EventArgs e)
         {
-            string name = textBox1.Text.Trim();
-            int cnt = (int)numericUpDown1.Value;
-
-            ListViewItem item = ListViewTryFindText(listView1, name);
-            if (item != null)
-            {
-                int loc = listView1.Items.IndexOf(item);
-                int.TryParse(listView1.Items[loc].SubItems[1].Text, out cnt);
-                cnt -= (int)numericUpDown1.Value;
-
-                if (cnt > 0)
-                { listView1.Items[loc].SubItems[1].Text = cnt.ToString(); }
-                else
-                {
-                    listView1.Items[loc].Remove();
-                    TextBox1_TextChanged(null, null);
-                }
-
-            }
-            UpdateEntryList();
+            ListView1_Update_Ticket(TicketUpdateType.Subtract);
         }// Subtract
         private void Button7_Click(object sender, EventArgs e)
         {
@@ -374,6 +409,28 @@ namespace Picket
             ReverseUpdateEntryList();
             Instance.Methods.Draw.Invoke(Instance.iRandomInstance, new object[] { 15, 30, 150 });
         }// Shuffle
+        private void Button8_Click(object sender, EventArgs e)
+        {
+            if (listView2.SelectedItems.Count > 0)
+            {
+                int loc = listView2.SelectedItems[0].Index;
+                ListViewItem item = listView2.Items[loc];
+                string name = item.Text;
+                Color c1 = item.BackColor;
+                Color c2 = item.ForeColor;
+                item.Remove();
+
+                for (int i = loc; i < listView2.Items.Count; i++)
+                {
+                    item = listView2.Items[i];
+                    int cnt;
+                    int.TryParse(item.SubItems[1].Text, out cnt);
+                    item.SubItems[1].Text = (cnt - 1).ToString();
+                }
+
+                ListView1_Update_Ticket(TicketUpdateType.Add, name, 1, c1, c2);
+            }
+        }// Move back winner
         private void ListView1_DoubleClick(object sender, EventArgs e)
         {
             ListViewItem item = listView1.SelectedItems[0];
@@ -439,7 +496,19 @@ namespace Picket
         }
         #endregion
 
-        #region GUI Changes
+        #region Trackbar Clicks
+        private void Trackbar_Labels_Click(object sender, EventArgs e)
+        {
+            int trackNumber;
+            string labelName = "";
+            try { labelName = ((Label)sender).Name.Split('_')[1]; } catch { }
+            int.TryParse(labelName, out trackNumber);
+            trackBar1.Value = trackNumber;
+            TrackBar1_Scroll(null, null);
+        }// Merged all click events to one based on label Name.
+        #endregion
+
+        #region Other GUI Changes
         private void ProgressUpdate(string[] info, int i = -1)
         {
             if (PT != PowerType.Infinite)
@@ -458,8 +527,18 @@ namespace Picket
                 else
                 { perc = i; }
                 if (perc < 0) { perc *= -1; }
-                progressBar1.Value = perc;
-                progressBar1.Update();
+                if (progressBar1.Value != perc)
+                {
+                    
+                    progressBar1.Value = perc;
+                    progressBar1.Update();
+                    if (perc == 100)
+                    {
+                        Refresh();
+                        Update();
+                        Refresh();
+                    }
+                }
             }
         }
         private void TextBox1_TextChanged(object sender, EventArgs e)
@@ -510,6 +589,24 @@ namespace Picket
         {
             ClearPluginToolStripMenuItem_Click(null, null);
         }
+        private void ListViewSetGUI()
+        {
+            if (!moveWinningTicketToolStripMenuItem.Checked)
+            {
+                listView2.Visible = false;
+                button8.Visible = false;
+                listView3.Visible = true;
+                button9.Visible = true;
+            }
+            else
+            {
+                listView2.Visible = true;
+                button8.Visible = true;
+                listView3.Visible = false;
+                button9.Visible = false;
+            }
+            this.Refresh();
+        }
         #endregion
 
 
@@ -529,16 +626,62 @@ namespace Picket
             Random rnd = new Random();
             return Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
         }
-
-        private ListViewItem ListViewTryFindText(ListView listView, string text)
+        private void MoveWinningTicketToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ListViewItem item = null;
-            if (listView.Items.Count > 0)
-            { item = listView.FindItemWithText(text, true, 0, false); }
-            return item;
+            moveWinningTicketToolStripMenuItem.Checked = moveWinningTicketToolStripMenuItem.Checked ? false : true;
+            if (listView2.Items.Count > 0 || listView3.Items.Count > 0)
+            {
+                DialogResult dialogResult = MessageBox.Show("Switching this setting will cause current winners to be cleared.\r\nContinue?", "Picket Warning", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    if (listView2.Items.Count > 0)
+                    {
+                        dialogResult = MessageBox.Show("Move picked tickets back to original list?", "Picket Warning", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            foreach (ListViewItem item in listView2.Items)
+                            {
+                                item.Selected = true;
+                                Button8_Click(null, null);
+                            }
+                        }
+                    }
+                    listView3.Items.Clear();
+                }
+            }
+            ListViewSetGUI();
         }
 
-        
-    }
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                radioButton1.Enabled = true;
+                radioButton2.Enabled = true;
+                numericUpDown2.Enabled = true;
+            }
+            else
+            {
+                radioButton1.Enabled = false;
+                radioButton2.Enabled = false;
+                numericUpDown2.Enabled = false;
+            }
+        }
 
+        private void ClearWinnersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listView3.Items.Clear();
+        }
+
+        private void Button9_Click(object sender, EventArgs e)
+        {
+            listView3.Items.Clear();
+        }
+    }
+    public enum TicketUpdateType
+    {
+        Add,
+        Subtract,
+        Update
+    }
 }
