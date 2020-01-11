@@ -11,13 +11,13 @@ Work-in-progress...
 Clicking the ‘Random Pick’ button will activate the plugin animation. While the interface between the plugins are the same, each plugin is fundamentally different.
 <br>
 <h4>Plugins</h4>
-<br>
+
 The MagicWheel Plugin
 
 - The wheel can be loaded with names and randomly sorted.
 - The wheel will spin according to the strength it starts with.
 - It will then slowly stop and pick a random ticket.
-<br>
+
 The MagicHat Plugin.
 
 - The hat can be filled with names.
@@ -25,7 +25,7 @@ The MagicHat Plugin.
 - It will then stop and pick a random ticket.
 <br>
 More in-depth details on how each plugin works can be found on each of the plugin download pages.
-<br><br>
+<br>
 <h4>Pick Strength</h4>
 The pick strength slider allows you to control how long the picking process will take.
 
