@@ -28,7 +28,8 @@ More in-depth details on how each plugin works can be found on each of the plugi
 <br>
 
 <h4>Ticket List</h4>
-The Ticket List holds all tickets. This list is actually separate from the plugin’s internal list and is coded to update along-side it.
+The Ticket Pool holds all tickets.
+This list is actually separate from the plugin’s internal list and is coded to update along-side it.
 
 - Click “+” to enter a new ticket.
   - Set a name, color, and ticket count before adding.
@@ -39,25 +40,22 @@ The Ticket List holds all tickets. This list is actually separate from the plugi
 
 <h4>Advanced</h4>
 Advanced option will expand the GUI to show more on-screen options.
-
+<br>
 The Automatic Pic option will allow multiple Winners to be selected automatically.
-
 - All will continuously pick until the Ticket Pool is empty.
 - Count will continuously pick until the counter reaches 0.
 
 The pick strength slider allows you to control how long the picking process will take.
-
 - Weak, Average, or Strong will be a short to longer picking time.
 - Super will be a long picking time.
 - Random will choose a random setting between Weak and Super.
 - Infinite will allow the picking process to continue until it is manually stopped.
     - Stopping the pick on Infinite will still choose a random ticket and will not immediately stop.
-    
-The Shuffle button will manually mix up the list so that tickets are not clumped together.
 
-  - The internal plugin list will first be shuffled.
-  - The GUI list will be updated accordingly.
-  - If shuffled, the internal list will be randomized.
+The Shuffle button will manually mix up the list so that tickets are not clumped together.
+- The internal plugin list will first be shuffled.
+- The GUI list will be updated accordingly.
+- If shuffled, the internal list will be randomized.
 
 <br><br>
 Reflection training
