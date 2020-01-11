@@ -10,12 +10,12 @@ namespace Picket
     public class MyReflection
     {
         public ReflectionData Instance { get; private set; }
-        public MyReflection(Form f, Assembly assembly)
+        public MyReflection(Control f, Assembly assembly)
         {
             Instance = ReflectionLoadSet(f, assembly);
         }
 
-        private ReflectionData ReflectionLoadSet(Form f, Assembly assembly)
+        private ReflectionData ReflectionLoadSet(Control f, Assembly assembly)
         {
             ReflectionData rd = new ReflectionData();
             rd.Assembly = assembly;
@@ -42,16 +42,26 @@ namespace Picket
             rd.EntryType = rd.Assembly.GetType("RandomTool.Entry");
 
             //-----------Actions----------
+
+            // Find parent Form from control
+            var control = f;
+            Form parent = control as Form;
+            while (parent == null)
+            {
+                control = control.Parent;
+                parent = control as Form;
+            }
+
             EventInfo stopEventInfo = iRandomToolType.GetEvent("ToolStopCall");
             Type eventType = rd.Assembly.GetType("RandomTool.ToolStopEventHandler");
-            Delegate eventHandler = Delegate.CreateDelegate(eventType, f, "EventStopCall");
+            Delegate eventHandler = Delegate.CreateDelegate(eventType, parent, "EventStopCall");
             rd.ActionEvents.Add(stopEventInfo);
             rd.ActionDelegates.Add(eventHandler);
             stopEventInfo.AddEventHandler(rd.iRandomInstance, eventHandler);
 
             EventInfo actionEventInfo = iRandomToolType.GetEvent("ToolActionCall");
             eventType = rd.Assembly.GetType("RandomTool.ToolActionEventHandler");
-            eventHandler = Delegate.CreateDelegate(eventType, f, "EventActionCall");
+            eventHandler = Delegate.CreateDelegate(eventType, parent, "EventActionCall");
             rd.ActionEvents.Add(actionEventInfo);
             rd.ActionDelegates.Add(eventHandler);
             actionEventInfo.AddEventHandler(rd.iRandomInstance, eventHandler);
@@ -139,6 +149,7 @@ namespace Picket
             methods.Draw = t.GetMethod("Draw", new Type[] { typeof(int), typeof(int), typeof(int) });
             methods.Start = t.GetMethod("Start", new Type[] { typeof(int), typeof(int), typeof(int) });
             methods.EntryAdd = t.GetMethod("EntryAdd", new Type[] { ((Type)t.Assembly.GetType("RandomTool.Entry", false, true)) });
+            methods.EntryRemove = t.GetMethod("EntryRemove", new Type[] { typeof(int) });
             methods.EntriesClear = t.GetMethod("EntriesClear", new Type[] { });
             methods.ShuffleEntries = t.GetMethod("ShuffleEntries", new Type[] { });
             methods.EntryList = t.GetMethod("EntryList", new Type[] { });
@@ -154,6 +165,7 @@ namespace Picket
             public MethodInfo Start { get; set; }
             public MethodInfo EntryAdd { get; set; }
             public MethodInfo EntriesClear { get; set; }
+            public MethodInfo EntryRemove { get; set; }
             public MethodInfo ShuffleEntries { get; set; }
             public MethodInfo EntryList { get; set; }
             public MethodInfo Stop { get; set; }

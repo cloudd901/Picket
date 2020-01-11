@@ -28,27 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem16 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "Mark",
             "3"}, -1, System.Drawing.Color.Empty, System.Drawing.Color.LightSteelBlue, null);
-            System.Windows.Forms.ListViewItem listViewItem17 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "Derrick",
             "1"}, -1, System.Drawing.Color.Empty, System.Drawing.SystemColors.Info, null);
-            System.Windows.Forms.ListViewItem listViewItem18 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
             "Someone Else",
             "2"}, -1, System.Drawing.Color.Empty, System.Drawing.Color.Turquoise, null);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fIleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restoreSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearTicketListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.clearWinnersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moveWinningTicketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeWinnerFromPoolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.advancedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -85,20 +94,29 @@
             this.listView3 = new System.Windows.Forms.ListView();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.clearWinnersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.button9 = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.pluginBG = new System.Windows.Forms.Label();
+            this.labelTktListCnt = new System.Windows.Forms.Label();
+            this.labelWinListCnt = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label8 = new System.Windows.Forms.Label();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(347, 97);
+            this.button1.Location = new System.Drawing.Point(350, 24);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(92, 23);
             this.button1.TabIndex = 1;
@@ -108,9 +126,7 @@
             // 
             // button2
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.Location = new System.Drawing.Point(347, 261);
+            this.button2.Location = new System.Drawing.Point(350, 46);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(92, 23);
             this.button2.TabIndex = 2;
@@ -128,22 +144,44 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(741, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(759, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // fIleToolStripMenuItem
             // 
             this.fIleToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveSessionToolStripMenuItem,
+            this.restoreSessionToolStripMenuItem,
+            this.toolStripSeparator3,
             this.closeToolStripMenuItem});
             this.fIleToolStripMenuItem.Name = "fIleToolStripMenuItem";
             this.fIleToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fIleToolStripMenuItem.Text = "FIle";
             // 
+            // saveSessionToolStripMenuItem
+            // 
+            this.saveSessionToolStripMenuItem.Name = "saveSessionToolStripMenuItem";
+            this.saveSessionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.saveSessionToolStripMenuItem.Text = "Save Session";
+            this.saveSessionToolStripMenuItem.Click += new System.EventHandler(this.SaveSessionToolStripMenuItem_Click);
+            // 
+            // restoreSessionToolStripMenuItem
+            // 
+            this.restoreSessionToolStripMenuItem.Name = "restoreSessionToolStripMenuItem";
+            this.restoreSessionToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.restoreSessionToolStripMenuItem.Text = "Restore Session";
+            this.restoreSessionToolStripMenuItem.Click += new System.EventHandler(this.RestoreSessionToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(152, 6);
+            // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
@@ -168,38 +206,74 @@
             // clearAllToolStripMenuItem
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.ClearAllToolStripMenuItem_Click);
             // 
             // clearPluginToolStripMenuItem
             // 
             this.clearPluginToolStripMenuItem.Name = "clearPluginToolStripMenuItem";
-            this.clearPluginToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearPluginToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.clearPluginToolStripMenuItem.Text = "Clear Plugin";
             this.clearPluginToolStripMenuItem.Click += new System.EventHandler(this.ClearPluginToolStripMenuItem_Click);
             // 
             // clearTicketListToolStripMenuItem
             // 
             this.clearTicketListToolStripMenuItem.Name = "clearTicketListToolStripMenuItem";
-            this.clearTicketListToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearTicketListToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.clearTicketListToolStripMenuItem.Text = "Clear Ticket List";
             this.clearTicketListToolStripMenuItem.Click += new System.EventHandler(this.ClearTicketListToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(154, 6);
+            // 
+            // clearWinnersToolStripMenuItem
+            // 
+            this.clearWinnersToolStripMenuItem.Name = "clearWinnersToolStripMenuItem";
+            this.clearWinnersToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.clearWinnersToolStripMenuItem.Text = "Clear Winners";
+            this.clearWinnersToolStripMenuItem.Click += new System.EventHandler(this.ClearWinnersToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.moveWinningTicketToolStripMenuItem});
+            this.moveWinningTicketToolStripMenuItem,
+            this.removeWinnerFromPoolToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.advancedToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // moveWinningTicketToolStripMenuItem
             // 
+            this.moveWinningTicketToolStripMenuItem.Checked = true;
+            this.moveWinningTicketToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.moveWinningTicketToolStripMenuItem.Name = "moveWinningTicketToolStripMenuItem";
-            this.moveWinningTicketToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.moveWinningTicketToolStripMenuItem.Text = "Move Winning Ticket";
+            this.moveWinningTicketToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.moveWinningTicketToolStripMenuItem.Text = "Move Winning Ticket from Pool";
             this.moveWinningTicketToolStripMenuItem.Click += new System.EventHandler(this.MoveWinningTicketToolStripMenuItem_Click);
+            // 
+            // removeWinnerFromPoolToolStripMenuItem
+            // 
+            this.removeWinnerFromPoolToolStripMenuItem.Name = "removeWinnerFromPoolToolStripMenuItem";
+            this.removeWinnerFromPoolToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.removeWinnerFromPoolToolStripMenuItem.Text = "Remove Winner from Pool";
+            this.removeWinnerFromPoolToolStripMenuItem.Click += new System.EventHandler(this.RemoveWinnerFromPoolToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(240, 6);
+            // 
+            // advancedToolStripMenuItem
+            // 
+            this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.advancedToolStripMenuItem.Text = "Advanced Picket";
+            this.advancedToolStripMenuItem.Click += new System.EventHandler(this.AdvancedToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -219,17 +293,18 @@
             // listView1
             // 
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem16,
-            listViewItem17,
-            listViewItem18});
-            this.listView1.Location = new System.Drawing.Point(442, 97);
+            listViewItem1,
+            listViewItem2,
+            listViewItem3});
+            this.listView1.Location = new System.Drawing.Point(454, 97);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(141, 160);
@@ -247,26 +322,25 @@
             // columnHeader2
             // 
             this.columnHeader2.Text = "Cnt";
+            this.columnHeader2.Width = 28;
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.Color.Snow;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(442, 24);
+            this.label1.Location = new System.Drawing.Point(448, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(291, 43);
+            this.label1.Size = new System.Drawing.Size(302, 45);
             this.label1.TabIndex = 5;
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button3
             // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(442, 313);
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.Location = new System.Drawing.Point(454, 313);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(25, 23);
             this.button3.TabIndex = 6;
@@ -276,9 +350,8 @@
             // 
             // textBox1
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.textBox1.Location = new System.Drawing.Point(442, 288);
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(454, 288);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(109, 20);
             this.textBox1.TabIndex = 7;
@@ -290,14 +363,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(0, 339);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(741, 10);
+            this.progressBar1.Size = new System.Drawing.Size(759, 10);
             this.progressBar1.TabIndex = 9;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.numericUpDown1.Location = new System.Drawing.Point(548, 314);
+            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.numericUpDown1.Location = new System.Drawing.Point(560, 314);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown1.TabIndex = 10;
@@ -309,21 +381,19 @@
             // 
             // labelTktList
             // 
-            this.labelTktList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelTktList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelTktList.AutoSize = true;
-            this.labelTktList.Location = new System.Drawing.Point(443, 78);
+            this.labelTktList.Location = new System.Drawing.Point(461, 78);
             this.labelTktList.Name = "labelTktList";
-            this.labelTktList.Size = new System.Drawing.Size(56, 13);
+            this.labelTktList.Size = new System.Drawing.Size(64, 13);
             this.labelTktList.TabIndex = 11;
-            this.labelTktList.Text = "Ticket List";
+            this.labelTktList.Text = "Ticket Pool:";
             // 
             // button4
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.BackColor = System.Drawing.Color.Snow;
-            this.button4.Location = new System.Drawing.Point(557, 286);
+            this.button4.Location = new System.Drawing.Point(569, 286);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(26, 23);
             this.button4.TabIndex = 12;
@@ -337,10 +407,9 @@
             // 
             // button5
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(466, 313);
+            this.button5.Location = new System.Drawing.Point(478, 313);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(52, 23);
             this.button5.TabIndex = 13;
@@ -350,10 +419,9 @@
             // 
             // button6
             // 
-            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.button6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button6.Enabled = false;
-            this.button6.Location = new System.Drawing.Point(517, 313);
+            this.button6.Location = new System.Drawing.Point(529, 313);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(25, 23);
             this.button6.TabIndex = 14;
@@ -363,10 +431,8 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.trackBar1.LargeChange = 1;
-            this.trackBar1.Location = new System.Drawing.Point(394, 169);
+            this.trackBar1.Location = new System.Drawing.Point(56, 99);
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.trackBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -379,10 +445,8 @@
             // 
             // lbl_10
             // 
-            this.lbl_10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.lbl_10.AutoSize = true;
-            this.lbl_10.Location = new System.Drawing.Point(371, 175);
+            this.lbl_10.Location = new System.Drawing.Point(30, 102);
             this.lbl_10.Name = "lbl_10";
             this.lbl_10.Size = new System.Drawing.Size(38, 13);
             this.lbl_10.TabIndex = 16;
@@ -391,10 +455,8 @@
             // 
             // lbl_6
             // 
-            this.lbl_6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.lbl_6.AutoSize = true;
-            this.lbl_6.Location = new System.Drawing.Point(371, 201);
+            this.lbl_6.Location = new System.Drawing.Point(30, 128);
             this.lbl_6.Name = "lbl_6";
             this.lbl_6.Size = new System.Drawing.Size(35, 13);
             this.lbl_6.TabIndex = 17;
@@ -403,10 +465,8 @@
             // 
             // lbl_4
             // 
-            this.lbl_4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.lbl_4.AutoSize = true;
-            this.lbl_4.Location = new System.Drawing.Point(371, 214);
+            this.lbl_4.Location = new System.Drawing.Point(30, 141);
             this.lbl_4.Name = "lbl_4";
             this.lbl_4.Size = new System.Drawing.Size(38, 13);
             this.lbl_4.TabIndex = 18;
@@ -415,10 +475,8 @@
             // 
             // lbl_2
             // 
-            this.lbl_2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.lbl_2.AutoSize = true;
-            this.lbl_2.Location = new System.Drawing.Point(371, 227);
+            this.lbl_2.Location = new System.Drawing.Point(30, 154);
             this.lbl_2.Name = "lbl_2";
             this.lbl_2.Size = new System.Drawing.Size(47, 13);
             this.lbl_2.TabIndex = 19;
@@ -427,10 +485,8 @@
             // 
             // lbl_0
             // 
-            this.lbl_0.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.lbl_0.AutoSize = true;
-            this.lbl_0.Location = new System.Drawing.Point(371, 240);
+            this.lbl_0.Location = new System.Drawing.Point(30, 167);
             this.lbl_0.Name = "lbl_0";
             this.lbl_0.Size = new System.Drawing.Size(36, 13);
             this.lbl_0.TabIndex = 20;
@@ -439,10 +495,8 @@
             // 
             // lbl_8
             // 
-            this.lbl_8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.lbl_8.AutoSize = true;
-            this.lbl_8.Location = new System.Drawing.Point(371, 188);
+            this.lbl_8.Location = new System.Drawing.Point(30, 115);
             this.lbl_8.Name = "lbl_8";
             this.lbl_8.Size = new System.Drawing.Size(47, 13);
             this.lbl_8.TabIndex = 21;
@@ -451,9 +505,8 @@
             // 
             // button7
             // 
-            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.button7.Location = new System.Drawing.Point(442, 261);
+            this.button7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button7.Location = new System.Drawing.Point(454, 261);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(141, 23);
             this.button7.TabIndex = 22;
@@ -466,24 +519,26 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(23, 52);
+            this.label3.Location = new System.Drawing.Point(39, 49);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(259, 50);
+            this.label3.Size = new System.Drawing.Size(259, 75);
             this.label3.TabIndex = 23;
-            this.label3.Text = "Welcome to Picket.\r\nPlease select your plugin.";
+            this.label3.Text = "Welcome to Picket.\r\n\r\nPlease select your plugin.";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // listView2
             // 
             this.listView2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
             this.columnHeader4});
             this.listView2.FullRowSelect = true;
             this.listView2.GridLines = true;
-            this.listView2.Location = new System.Drawing.Point(592, 97);
+            this.listView2.Location = new System.Drawing.Point(609, 97);
             this.listView2.MultiSelect = false;
             this.listView2.Name = "listView2";
             this.listView2.Size = new System.Drawing.Size(141, 212);
@@ -494,27 +549,28 @@
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Ticket Name";
+            this.columnHeader3.Text = "Picked";
             this.columnHeader3.Width = 111;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "#";
+            this.columnHeader4.Width = 28;
             // 
             // labelWinList
             // 
-            this.labelWinList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelWinList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelWinList.AutoSize = true;
-            this.labelWinList.Location = new System.Drawing.Point(593, 78);
+            this.labelWinList.Location = new System.Drawing.Point(611, 78);
             this.labelWinList.Name = "labelWinList";
-            this.labelWinList.Size = new System.Drawing.Size(65, 13);
+            this.labelWinList.Size = new System.Drawing.Size(68, 13);
             this.labelWinList.TabIndex = 25;
-            this.labelWinList.Text = "Winning List";
+            this.labelWinList.Text = "Winning List:";
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(621, 314);
+            this.button8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button8.Location = new System.Drawing.Point(638, 314);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(83, 22);
             this.button8.TabIndex = 26;
@@ -526,11 +582,11 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(347, 126);
+            this.checkBox1.Location = new System.Drawing.Point(8, 18);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(86, 17);
+            this.checkBox1.Size = new System.Drawing.Size(97, 17);
             this.checkBox1.TabIndex = 27;
-            this.checkBox1.Text = "Multiple Pick";
+            this.checkBox1.Text = "Automatic Pick";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
@@ -539,11 +595,11 @@
             this.radioButton1.AutoSize = true;
             this.radioButton1.Enabled = false;
             this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(347, 147);
+            this.radioButton1.Location = new System.Drawing.Point(8, 40);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(40, 17);
+            this.radioButton1.Size = new System.Drawing.Size(36, 17);
             this.radioButton1.TabIndex = 28;
-            this.radioButton1.Text = "Ꝏ";
+            this.radioButton1.Text = "All";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // radioButton2
@@ -551,7 +607,7 @@
             this.radioButton2.AutoSize = true;
             this.radioButton2.Checked = true;
             this.radioButton2.Enabled = false;
-            this.radioButton2.Location = new System.Drawing.Point(385, 147);
+            this.radioButton2.Location = new System.Drawing.Point(46, 40);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(41, 17);
             this.radioButton2.TabIndex = 29;
@@ -561,10 +617,8 @@
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.numericUpDown2.Enabled = false;
-            this.numericUpDown2.Location = new System.Drawing.Point(401, 146);
+            this.numericUpDown2.Location = new System.Drawing.Point(64, 39);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown2.TabIndex = 30;
@@ -576,14 +630,14 @@
             // 
             // listView3
             // 
-            this.listView3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.listView3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listView3.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader5,
             this.columnHeader6});
             this.listView3.FullRowSelect = true;
             this.listView3.GridLines = true;
-            this.listView3.Location = new System.Drawing.Point(592, 97);
+            this.listView3.Location = new System.Drawing.Point(609, 97);
             this.listView3.MultiSelect = false;
             this.listView3.Name = "listView3";
             this.listView3.Size = new System.Drawing.Size(141, 212);
@@ -593,28 +647,18 @@
             // 
             // columnHeader5
             // 
-            this.columnHeader5.Text = "Ticket Name";
+            this.columnHeader5.Text = "Picked";
             this.columnHeader5.Width = 111;
             // 
             // columnHeader6
             // 
             this.columnHeader6.Text = "#";
-            // 
-            // clearWinnersToolStripMenuItem
-            // 
-            this.clearWinnersToolStripMenuItem.Name = "clearWinnersToolStripMenuItem";
-            this.clearWinnersToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.clearWinnersToolStripMenuItem.Text = "Clear Winners";
-            this.clearWinnersToolStripMenuItem.Click += new System.EventHandler(this.ClearWinnersToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.columnHeader6.Width = 28;
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(621, 314);
+            this.button9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button9.Location = new System.Drawing.Point(638, 314);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(83, 22);
             this.button9.TabIndex = 32;
@@ -623,27 +667,149 @@
             this.button9.Visible = false;
             this.button9.Click += new System.EventHandler(this.Button9_Click);
             // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.BackColor = System.Drawing.SystemColors.Control;
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label2.Location = new System.Drawing.Point(342, 29);
+            this.label2.MaximumSize = new System.Drawing.Size(2, 305);
+            this.label2.MinimumSize = new System.Drawing.Size(2, 305);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(2, 305);
+            this.label2.TabIndex = 33;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.BackColor = System.Drawing.SystemColors.Control;
+            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label4.Location = new System.Drawing.Point(348, 73);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(402, 2);
+            this.label4.TabIndex = 34;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.BackColor = System.Drawing.SystemColors.Control;
+            this.label5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label5.Location = new System.Drawing.Point(601, 80);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(2, 256);
+            this.label5.TabIndex = 35;
+            // 
+            // pluginBG
+            // 
+            this.pluginBG.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.pluginBG.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.pluginBG.Location = new System.Drawing.Point(0, 24);
+            this.pluginBG.Name = "pluginBG";
+            this.pluginBG.Size = new System.Drawing.Size(336, 315);
+            this.pluginBG.TabIndex = 36;
+            // 
+            // labelTktListCnt
+            // 
+            this.labelTktListCnt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelTktListCnt.Location = new System.Drawing.Point(566, 78);
+            this.labelTktListCnt.Name = "labelTktListCnt";
+            this.labelTktListCnt.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelTktListCnt.Size = new System.Drawing.Size(35, 13);
+            this.labelTktListCnt.TabIndex = 37;
+            this.labelTktListCnt.Text = "0";
+            this.labelTktListCnt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // labelWinListCnt
+            // 
+            this.labelWinListCnt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelWinListCnt.Location = new System.Drawing.Point(716, 78);
+            this.labelWinListCnt.Name = "labelWinListCnt";
+            this.labelWinListCnt.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.labelWinListCnt.Size = new System.Drawing.Size(35, 13);
+            this.labelWinListCnt.TabIndex = 38;
+            this.labelWinListCnt.Text = "0";
+            this.labelWinListCnt.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.BackColor = System.Drawing.SystemColors.Control;
+            this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label6.Location = new System.Drawing.Point(104, -1);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(2, 257);
+            this.label6.TabIndex = 39;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(5, 80);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(58, 13);
+            this.label7.TabIndex = 40;
+            this.label7.Text = "Pick Type:";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.numericUpDown2);
+            this.panel1.Controls.Add(this.checkBox1);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.radioButton2);
+            this.panel1.Controls.Add(this.radioButton1);
+            this.panel1.Controls.Add(this.lbl_8);
+            this.panel1.Controls.Add(this.lbl_10);
+            this.panel1.Controls.Add(this.lbl_0);
+            this.panel1.Controls.Add(this.lbl_6);
+            this.panel1.Controls.Add(this.lbl_2);
+            this.panel1.Controls.Add(this.lbl_4);
+            this.panel1.Controls.Add(this.trackBar1);
+            this.panel1.Location = new System.Drawing.Point(342, 79);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(108, 257);
+            this.panel1.TabIndex = 42;
+            // 
+            // label8
+            // 
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.Transparent;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(157, 250);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(178, 30);
+            this.label8.TabIndex = 43;
+            this.label8.Text = "Enter name in this box. Then\r\nclick + to add to Ticket Pool.  -->";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(741, 348);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(759, 348);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.labelWinListCnt);
+            this.Controls.Add(this.labelTktListCnt);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.button9);
-            this.Controls.Add(this.numericUpDown2);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.labelWinList);
             this.Controls.Add(this.listView2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button7);
-            this.Controls.Add(this.lbl_8);
-            this.Controls.Add(this.lbl_0);
-            this.Controls.Add(this.lbl_2);
-            this.Controls.Add(this.lbl_4);
-            this.Controls.Add(this.lbl_6);
-            this.Controls.Add(this.lbl_10);
-            this.Controls.Add(this.trackBar1);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -652,16 +818,17 @@
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.listView3);
-            this.Controls.Add(this.radioButton1);
+            this.Controls.Add(this.pluginBG);
+            this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximumSize = new System.Drawing.Size(757, 387);
-            this.MinimumSize = new System.Drawing.Size(757, 387);
+            this.MaximumSize = new System.Drawing.Size(775, 387);
+            this.MinimumSize = new System.Drawing.Size(775, 387);
             this.Name = "Form1";
             this.Text = "Picket";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -670,6 +837,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -727,6 +896,24 @@
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        public System.Windows.Forms.Label pluginBG;
+        private System.Windows.Forms.ToolStripMenuItem removeWinnerFromPoolToolStripMenuItem;
+        private System.Windows.Forms.Label labelTktListCnt;
+        private System.Windows.Forms.Label labelWinListCnt;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem advancedToolStripMenuItem;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ToolStripMenuItem saveSessionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem restoreSessionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 
