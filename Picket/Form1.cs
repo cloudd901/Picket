@@ -98,6 +98,8 @@ namespace Picket
             Instance.ToolProperties.ForceUniqueEntryColors.SetValue(Instance.ToolPropertiesObj, true);
             Instance.ToolProperties.ArrowPosition.SetValue(Instance.ToolPropertiesObj, (int)ArrowLocation.Left);
             Instance.ToolProperties.TextToShow.SetValue(Instance.ToolPropertiesObj, (int)TextType.Name);
+            Instance.ToolProperties.AnimationSpeed.SetValue(Instance.ToolPropertiesObj, 0.08f);
+            Instance.ToolProperties.AnimationSpeedBoost.SetValue(Instance.ToolPropertiesObj, checkBox2.Checked);
             Instance.Properties.AllowExceptions.SetValue(Instance.iRandomInstance, false);
 
             UpdateEntryList();
@@ -463,23 +465,59 @@ namespace Picket
         }// Shuffle
         private void Button8_Click(object sender, EventArgs e)
         {
-            if (listView2.SelectedItems.Count > 0)
+            if (listView2.Items.Count > 0)
             {
-                int loc = listView2.SelectedItems[0].Index;
-                ListViewItem item = listView2.Items[loc];
-                string name = item.Text;
-                Color c1 = item.BackColor;
-                Color c2 = item.ForeColor;
-                item.Remove();
-
-                for (int i = loc; i < listView2.Items.Count; i++)
+                if (listView2.SelectedItems.Count == 0)
                 {
-                    item = listView2.Items[i];
-                    int cnt;
-                    int.TryParse(item.SubItems[1].Text, out cnt);
-                    item.SubItems[1].Text = (cnt - 1).ToString();
+                    DialogResult dialogResult = MessageBox.Show($"Move the last winning ticket back?\r\n[{listView2.Items[listView2.Items.Count - 1].Text}] - Place [{listView2.Items[listView2.Items.Count - 1].SubItems[1].Text}]", "Picket Warning", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        listView2.Items[listView2.Items.Count - 1].Selected = true;
+                    }
                 }
-                ListView1_Update_Ticket(TicketUpdateType.Add, name, 1, c1, c2);
+
+                else if (listView2.SelectedItems.Count == 1)
+                {
+                    DialogResult dialogResult = MessageBox.Show($"Move the selected winning ticket back?\r\n[{listView2.SelectedItems[0].Text}] - Place [{listView2.SelectedItems[0].SubItems[1].Text}]", "Picket Warning", MessageBoxButtons.YesNo);
+                    if (dialogResult != DialogResult.Yes)
+                    {
+                        listView2.SelectedItems[0].Selected = false;
+                    }
+                }
+
+                else if (listView2.SelectedItems.Count > 1)
+                {
+                    DialogResult dialogResult = MessageBox.Show($"Move multiple selected winning tickets back?", "Picket Warning", MessageBoxButtons.YesNo);
+                    if (dialogResult != DialogResult.Yes)
+                    {
+                        foreach (ListViewItem lvi in listView2.SelectedItems)
+                        {
+                            lvi.Selected = false;
+                        }
+                    }
+                }
+
+                if (listView2.SelectedItems.Count > 0)
+                {
+                    foreach (ListViewItem lvi in listView2.SelectedItems)
+                    {
+                        int loc = lvi.Index;
+                        ListViewItem item = listView2.Items[loc];
+                        string name = item.Text;
+                        Color c1 = item.BackColor;
+                        Color c2 = item.ForeColor;
+                        item.Remove();
+
+                        for (int i = loc; i < listView2.Items.Count; i++)
+                        {
+                            item = listView2.Items[i];
+                            int cnt;
+                            int.TryParse(item.SubItems[1].Text, out cnt);
+                            item.SubItems[1].Text = (cnt - 1).ToString();
+                        }
+                        ListView1_Update_Ticket(TicketUpdateType.Add, name, 1, c1, c2);
+                    }
+                }
             }
         }// Move back winner
         private void Button9_Click(object sender, EventArgs e)
@@ -846,6 +884,22 @@ namespace Picket
             return Math.Abs(color1.GetBrightness() - color2.GetBrightness()) >= 0.5f;
         }
         #endregion
+
+        private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            Instance.ToolProperties.AnimationSpeed.SetValue(Instance.ToolPropertiesObj, (float)numericUpDown3.Value);
+        }
+
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            Instance.ToolProperties.AnimationSpeedBoost.SetValue(Instance.ToolPropertiesObj, checkBox2.Checked);
+        }
+
+        private void Button10_Click(object sender, EventArgs e)
+        {
+            numericUpDown3.Value = (decimal)0.080;
+            checkBox2.Checked = true;
+        }
     }
     public enum TicketUpdateType
     {

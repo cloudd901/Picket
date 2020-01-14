@@ -98,11 +98,18 @@
             this.label8 = new System.Windows.Forms.Label();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.button10 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -197,33 +204,33 @@
             // clearAllToolStripMenuItem
             // 
             this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.clearAllToolStripMenuItem.Text = "Clear All";
             this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.ClearAllToolStripMenuItem_Click);
             // 
             // clearPluginToolStripMenuItem
             // 
             this.clearPluginToolStripMenuItem.Name = "clearPluginToolStripMenuItem";
-            this.clearPluginToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.clearPluginToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.clearPluginToolStripMenuItem.Text = "Clear Plugin";
             this.clearPluginToolStripMenuItem.Click += new System.EventHandler(this.ClearPluginToolStripMenuItem_Click);
             // 
             // clearTicketListToolStripMenuItem
             // 
             this.clearTicketListToolStripMenuItem.Name = "clearTicketListToolStripMenuItem";
-            this.clearTicketListToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.clearTicketListToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.clearTicketListToolStripMenuItem.Text = "Clear Ticket List";
             this.clearTicketListToolStripMenuItem.Click += new System.EventHandler(this.ClearTicketListToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(154, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(153, 6);
             // 
             // clearWinnersToolStripMenuItem
             // 
             this.clearWinnersToolStripMenuItem.Name = "clearWinnersToolStripMenuItem";
-            this.clearWinnersToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.clearWinnersToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
             this.clearWinnersToolStripMenuItem.Text = "Clear Winners";
             this.clearWinnersToolStripMenuItem.Click += new System.EventHandler(this.ClearWinnersToolStripMenuItem_Click);
             // 
@@ -243,26 +250,26 @@
             this.moveWinningTicketToolStripMenuItem.Checked = true;
             this.moveWinningTicketToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.moveWinningTicketToolStripMenuItem.Name = "moveWinningTicketToolStripMenuItem";
-            this.moveWinningTicketToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.moveWinningTicketToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.moveWinningTicketToolStripMenuItem.Text = "Move Winning Ticket from Pool";
             this.moveWinningTicketToolStripMenuItem.Click += new System.EventHandler(this.MoveWinningTicketToolStripMenuItem_Click);
             // 
             // removeWinnerFromPoolToolStripMenuItem
             // 
             this.removeWinnerFromPoolToolStripMenuItem.Name = "removeWinnerFromPoolToolStripMenuItem";
-            this.removeWinnerFromPoolToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.removeWinnerFromPoolToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.removeWinnerFromPoolToolStripMenuItem.Text = "Remove Winner from Pool";
             this.removeWinnerFromPoolToolStripMenuItem.Click += new System.EventHandler(this.RemoveWinnerFromPoolToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(240, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(239, 6);
             // 
             // advancedToolStripMenuItem
             // 
             this.advancedToolStripMenuItem.Name = "advancedToolStripMenuItem";
-            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(243, 22);
+            this.advancedToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.advancedToolStripMenuItem.Text = "Advanced Picket";
             this.advancedToolStripMenuItem.Click += new System.EventHandler(this.AdvancedToolStripMenuItem_Click);
             // 
@@ -291,6 +298,7 @@
             this.columnHeader2});
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(454, 97);
             this.listView1.MultiSelect = false;
             this.listView1.Name = "listView1";
@@ -419,7 +427,7 @@
             // trackBar1
             // 
             this.trackBar1.LargeChange = 1;
-            this.trackBar1.Location = new System.Drawing.Point(56, 99);
+            this.trackBar1.Location = new System.Drawing.Point(56, 74);
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.trackBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -433,7 +441,7 @@
             // lbl_10
             // 
             this.lbl_10.AutoSize = true;
-            this.lbl_10.Location = new System.Drawing.Point(30, 102);
+            this.lbl_10.Location = new System.Drawing.Point(30, 77);
             this.lbl_10.Name = "lbl_10";
             this.lbl_10.Size = new System.Drawing.Size(38, 13);
             this.lbl_10.TabIndex = 16;
@@ -443,7 +451,7 @@
             // lbl_6
             // 
             this.lbl_6.AutoSize = true;
-            this.lbl_6.Location = new System.Drawing.Point(30, 128);
+            this.lbl_6.Location = new System.Drawing.Point(30, 103);
             this.lbl_6.Name = "lbl_6";
             this.lbl_6.Size = new System.Drawing.Size(35, 13);
             this.lbl_6.TabIndex = 17;
@@ -453,7 +461,7 @@
             // lbl_4
             // 
             this.lbl_4.AutoSize = true;
-            this.lbl_4.Location = new System.Drawing.Point(30, 141);
+            this.lbl_4.Location = new System.Drawing.Point(30, 116);
             this.lbl_4.Name = "lbl_4";
             this.lbl_4.Size = new System.Drawing.Size(38, 13);
             this.lbl_4.TabIndex = 18;
@@ -463,7 +471,7 @@
             // lbl_2
             // 
             this.lbl_2.AutoSize = true;
-            this.lbl_2.Location = new System.Drawing.Point(30, 154);
+            this.lbl_2.Location = new System.Drawing.Point(30, 129);
             this.lbl_2.Name = "lbl_2";
             this.lbl_2.Size = new System.Drawing.Size(47, 13);
             this.lbl_2.TabIndex = 19;
@@ -473,7 +481,7 @@
             // lbl_0
             // 
             this.lbl_0.AutoSize = true;
-            this.lbl_0.Location = new System.Drawing.Point(30, 167);
+            this.lbl_0.Location = new System.Drawing.Point(30, 142);
             this.lbl_0.Name = "lbl_0";
             this.lbl_0.Size = new System.Drawing.Size(36, 13);
             this.lbl_0.TabIndex = 20;
@@ -483,7 +491,7 @@
             // lbl_8
             // 
             this.lbl_8.AutoSize = true;
-            this.lbl_8.Location = new System.Drawing.Point(30, 115);
+            this.lbl_8.Location = new System.Drawing.Point(30, 90);
             this.lbl_8.Name = "lbl_8";
             this.lbl_8.Size = new System.Drawing.Size(47, 13);
             this.lbl_8.TabIndex = 21;
@@ -525,8 +533,8 @@
             this.columnHeader4});
             this.listView2.FullRowSelect = true;
             this.listView2.GridLines = true;
+            this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(609, 97);
-            this.listView2.MultiSelect = false;
             this.listView2.Name = "listView2";
             this.listView2.Size = new System.Drawing.Size(141, 212);
             this.listView2.TabIndex = 24;
@@ -569,7 +577,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(8, 18);
+            this.checkBox1.Location = new System.Drawing.Point(8, 5);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(97, 17);
             this.checkBox1.TabIndex = 27;
@@ -582,7 +590,7 @@
             this.radioButton1.AutoSize = true;
             this.radioButton1.Enabled = false;
             this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(8, 40);
+            this.radioButton1.Location = new System.Drawing.Point(8, 27);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(36, 17);
             this.radioButton1.TabIndex = 28;
@@ -594,7 +602,7 @@
             this.radioButton2.AutoSize = true;
             this.radioButton2.Checked = true;
             this.radioButton2.Enabled = false;
-            this.radioButton2.Location = new System.Drawing.Point(46, 40);
+            this.radioButton2.Location = new System.Drawing.Point(46, 27);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(41, 17);
             this.radioButton2.TabIndex = 29;
@@ -605,7 +613,7 @@
             // numericUpDown2
             // 
             this.numericUpDown2.Enabled = false;
-            this.numericUpDown2.Location = new System.Drawing.Point(64, 39);
+            this.numericUpDown2.Location = new System.Drawing.Point(64, 26);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(35, 20);
             this.numericUpDown2.TabIndex = 30;
@@ -624,6 +632,7 @@
             this.columnHeader6});
             this.listView3.FullRowSelect = true;
             this.listView3.GridLines = true;
+            this.listView3.HideSelection = false;
             this.listView3.Location = new System.Drawing.Point(609, 97);
             this.listView3.MultiSelect = false;
             this.listView3.Name = "listView3";
@@ -734,7 +743,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(5, 80);
+            this.label7.Location = new System.Drawing.Point(5, 55);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(58, 13);
             this.label7.TabIndex = 40;
@@ -742,6 +751,11 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button10);
+            this.panel1.Controls.Add(this.label11);
+            this.panel1.Controls.Add(this.label10);
+            this.panel1.Controls.Add(this.numericUpDown3);
+            this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.numericUpDown2);
             this.panel1.Controls.Add(this.checkBox1);
@@ -755,6 +769,7 @@
             this.panel1.Controls.Add(this.lbl_2);
             this.panel1.Controls.Add(this.lbl_4);
             this.panel1.Controls.Add(this.trackBar1);
+            this.panel1.Controls.Add(this.checkBox2);
             this.panel1.Location = new System.Drawing.Point(342, 79);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(108, 257);
@@ -777,6 +792,91 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.checkBox2.Checked = true;
+            this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox2.Location = new System.Drawing.Point(4, 193);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(102, 31);
+            this.checkBox2.TabIndex = 41;
+            this.checkBox2.Text = "Boost (if supported)";
+            this.checkBox2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.CheckBox2_CheckedChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(8, 172);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(38, 13);
+            this.label9.TabIndex = 42;
+            this.label9.Text = "Speed";
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.DecimalPlaces = 3;
+            this.numericUpDown3.Increment = new decimal(new int[] {
+            50,
+            0,
+            0,
+            196608});
+            this.numericUpDown3.Location = new System.Drawing.Point(45, 170);
+            this.numericUpDown3.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDown3.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(49, 20);
+            this.numericUpDown3.TabIndex = 43;
+            this.numericUpDown3.Value = new decimal(new int[] {
+            80,
+            0,
+            0,
+            196608});
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.NumericUpDown3_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label10.BackColor = System.Drawing.SystemColors.Control;
+            this.label10.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label10.Location = new System.Drawing.Point(11, 51);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(87, 2);
+            this.label10.TabIndex = 44;
+            // 
+            // label11
+            // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label11.BackColor = System.Drawing.SystemColors.Control;
+            this.label11.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label11.Location = new System.Drawing.Point(11, 163);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(87, 2);
+            this.label11.TabIndex = 45;
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(27, 230);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(52, 22);
+            this.button10.TabIndex = 46;
+            this.button10.Text = "Default";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.Button10_Click);
             // 
             // Form1
             // 
@@ -826,6 +926,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -901,6 +1002,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label10;
     }
 }
 

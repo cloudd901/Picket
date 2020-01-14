@@ -104,6 +104,8 @@ namespace Picket
             properties.CenterVisible = o.GetType().GetProperty("ToolProperties").GetValue(o).GetType().GetProperty("CenterVisible");
             properties.CenterColor = o.GetType().GetProperty("ToolProperties").GetValue(o).GetType().GetProperty("CenterColor");
             properties.CenterSize = o.GetType().GetProperty("ToolProperties").GetValue(o).GetType().GetProperty("CenterSize");
+            properties.AnimationSpeed = o.GetType().GetProperty("ToolProperties").GetValue(o).GetType().GetProperty("AnimationSpeed");
+            properties.AnimationSpeedBoost = o.GetType().GetProperty("ToolProperties").GetValue(o).GetType().GetProperty("AnimationSpeedBoost");
             return properties;
         }
 
@@ -127,6 +129,8 @@ namespace Picket
             public PropertyInfo CenterVisible { get; set; }
             public PropertyInfo CenterColor { get; set; }
             public PropertyInfo CenterSize { get; set; }
+            public PropertyInfo AnimationSpeed { get; set; }
+            public PropertyInfo AnimationSpeedBoost { get; set; }
         }
         private Options SetOptions(object o)
         {

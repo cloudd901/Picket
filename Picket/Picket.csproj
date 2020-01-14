@@ -104,8 +104,6 @@
     <Content Include="FodyWeavers.xml" />
     <None Include="picket.ico" />
     <None Include="picket.png" />
-    <Content Include="picket1.ico" />
-    <Content Include="picket2.ico" />
     <Content Include="plugins\MagicHat.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
