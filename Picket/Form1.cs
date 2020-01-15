@@ -22,12 +22,12 @@ namespace Picket
         private PowerType PT { get; set; } = PowerType.Random;
         private MyReflection.ReflectionData Instance { get; set; }
         private List<AssemblyName> AssList { get; } = new List<AssemblyName>();
+        private string SessionFile { get; } = Environment.CurrentDirectory + "\\session.pkt";
 
         public Form1()
         {
             InitializeComponent();
-            ListViewSetGUI();
-            AdvancedToolStripMenuItem_Click(null, null);
+
             DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory() + @"\plugins\");
             di.GetFiles("*.dll");
             foreach (FileInfo f in di.GetFiles("*.dll"))
@@ -36,6 +36,10 @@ namespace Picket
                 ToolStripMenuItem item = new ToolStripMenuItem(AssList.Last().Name, null, LoadAssembly, AssList.Last().Name);
                 pluginToolStripMenuItem.DropDownItems.Add(item);
             }
+
+            ListViewSetGUI();
+            AdvancedToolStripMenuItem_Click(null, null);
+            
             TrackBar1_Scroll(null, null);
             button4.BackColor = ColorRandom();
             ButtonStates(false);
@@ -44,6 +48,12 @@ namespace Picket
             label8.Parent = pluginBG;
             label8.Update();
             UpdateEntryCount();
+
+            if (File.Exists(SessionFile))
+            {
+                autoSaveRestoreToolStripMenuItem.Checked = true;
+                RestoreSessionFile(SessionFile);
+            }
         }
 
         #region Assembly
@@ -192,7 +202,6 @@ namespace Picket
 
             ListViewItem pickedItem = ListViewTryFindText(listView1, name);
             int countLV2 = listView2.Items.Count + 1;
-            int countLV3 = listView3.Items.Count + 1;
 
             // Remove items from Plugin List first and listView1 second.
             // This process will keep the order of the Plugin List.
@@ -202,12 +211,9 @@ namespace Picket
             {
                 Instance.Methods.EntryRemove.Invoke(Instance.iRandomInstance, new object[] { tkt });
                 ReverseUpdateEntryList();
-                listView2.Items.Add(new ListViewItem(new string[] { name, countLV2.ToString() }, 0, pickedItem.ForeColor, pickedItem.BackColor, default));
             }
-            else
-            {
-                listView3.Items.Add(new ListViewItem(new string[] { name, countLV3.ToString() }, 0, pickedItem.ForeColor, pickedItem.BackColor, default));
-            }
+            listView2.Items.Add(new ListViewItem(new string[] { name, countLV2.ToString() }, 0, pickedItem.ForeColor, pickedItem.BackColor, default));
+
             if (removeWinnerFromPoolToolStripMenuItem.Checked)
             {
                 var entryList = CallEntryList();
@@ -377,7 +383,7 @@ namespace Picket
             int cnt1 = 0;
             foreach (ListViewItem item in listView1.Items)
             { cnt1 += int.Parse(item.SubItems[1].Text); }
-            int cnt2 = moveWinningTicketToolStripMenuItem.Checked ? listView2.Items.Count : listView3.Items.Count;
+            int cnt2 = listView2.Items.Count;
 
             labelTktListCnt.Text = cnt1.ToString();
             labelWinListCnt.Text = cnt2.ToString();
@@ -465,66 +471,84 @@ namespace Picket
         }// Shuffle
         private void Button8_Click(object sender, EventArgs e)
         {
-            if (listView2.Items.Count > 0)
+            if (moveWinningTicketToolStripMenuItem.Checked)
             {
-                if (listView2.SelectedItems.Count == 0)
+                if (listView2.Items.Count > 0)
                 {
-                    DialogResult dialogResult = MessageBox.Show($"Move the last winning ticket back?\r\n[{listView2.Items[listView2.Items.Count - 1].Text}] - Place [{listView2.Items[listView2.Items.Count - 1].SubItems[1].Text}]", "Picket Warning", MessageBoxButtons.YesNo);
-                    if (dialogResult == DialogResult.Yes)
+                    if (sender != null)
                     {
-                        listView2.Items[listView2.Items.Count - 1].Selected = true;
-                    }
-                }
+                        if (listView2.SelectedItems.Count == 0)
+                        {
+                            DialogResult dialogResult = MessageBox.Show($"Move the last winning ticket back?\r\n[{listView2.Items[listView2.Items.Count - 1].Text}] - Place [{listView2.Items[listView2.Items.Count - 1].SubItems[1].Text}]", "Picket Warning", MessageBoxButtons.YesNo);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                listView2.Items[listView2.Items.Count - 1].Selected = true;
+                            }
+                        }
 
-                else if (listView2.SelectedItems.Count == 1)
-                {
-                    DialogResult dialogResult = MessageBox.Show($"Move the selected winning ticket back?\r\n[{listView2.SelectedItems[0].Text}] - Place [{listView2.SelectedItems[0].SubItems[1].Text}]", "Picket Warning", MessageBoxButtons.YesNo);
-                    if (dialogResult != DialogResult.Yes)
+                        else if (listView2.SelectedItems.Count == 1)
+                        {
+                            DialogResult dialogResult = MessageBox.Show($"Move the selected winning ticket back?\r\n[{listView2.SelectedItems[0].Text}] - Place [{listView2.SelectedItems[0].SubItems[1].Text}]", "Picket Warning", MessageBoxButtons.YesNo);
+                            if (dialogResult != DialogResult.Yes)
+                            {
+                                listView2.SelectedItems[0].Selected = false;
+                            }
+                        }
+
+                        else if (listView2.SelectedItems.Count > 1)
+                        {
+                            DialogResult dialogResult = MessageBox.Show($"Move multiple selected winning tickets back?", "Picket Warning", MessageBoxButtons.YesNo);
+                            if (dialogResult != DialogResult.Yes)
+                            {
+                                foreach (ListViewItem lvi in listView2.SelectedItems)
+                                {
+                                    lvi.Selected = false;
+                                }
+                            }
+                        }
+                    }
+                    else
                     {
-                        listView2.SelectedItems[0].Selected = false;
+                        foreach (ListViewItem lvi in listView2.Items)
+                        {
+                            lvi.Selected = true;
+                        }
                     }
-                }
 
-                else if (listView2.SelectedItems.Count > 1)
-                {
-                    DialogResult dialogResult = MessageBox.Show($"Move multiple selected winning tickets back?", "Picket Warning", MessageBoxButtons.YesNo);
-                    if (dialogResult != DialogResult.Yes)
+                    if (listView2.SelectedItems.Count > 0)
                     {
                         foreach (ListViewItem lvi in listView2.SelectedItems)
                         {
-                            lvi.Selected = false;
-                        }
-                    }
-                }
+                            int loc = lvi.Index;
+                            ListViewItem item = listView2.Items[loc];
+                            string name = item.Text;
+                            Color c1 = item.BackColor;
+                            Color c2 = item.ForeColor;
+                            item.Remove();
 
-                if (listView2.SelectedItems.Count > 0)
-                {
-                    foreach (ListViewItem lvi in listView2.SelectedItems)
-                    {
-                        int loc = lvi.Index;
-                        ListViewItem item = listView2.Items[loc];
-                        string name = item.Text;
-                        Color c1 = item.BackColor;
-                        Color c2 = item.ForeColor;
-                        item.Remove();
-
-                        for (int i = loc; i < listView2.Items.Count; i++)
-                        {
-                            item = listView2.Items[i];
-                            int cnt;
-                            int.TryParse(item.SubItems[1].Text, out cnt);
-                            item.SubItems[1].Text = (cnt - 1).ToString();
+                            for (int i = loc; i < listView2.Items.Count; i++)
+                            {
+                                item = listView2.Items[i];
+                                int cnt;
+                                int.TryParse(item.SubItems[1].Text, out cnt);
+                                item.SubItems[1].Text = (cnt - 1).ToString();
+                            }
+                            ListView1_Update_Ticket(TicketUpdateType.Add, name, 1, c1, c2);
                         }
-                        ListView1_Update_Ticket(TicketUpdateType.Add, name, 1, c1, c2);
                     }
                 }
             }
-        }// Move back winner
-        private void Button9_Click(object sender, EventArgs e)
+            else
+            {
+                listView2.Items.Clear();
+                UpdateEntryCount();
+            }
+        }// Move back winner / Clear Winners
+        private void Button10_Click(object sender, EventArgs e)
         {
-            listView3.Items.Clear();
-            UpdateEntryCount();
-        }// Clear Winners
+            numericUpDown3.Value = (decimal)0.080;
+            checkBox2.Checked = true;
+        }// Default Advanced
         private void ListView1_DoubleClick(object sender, EventArgs e)
         {
             ListViewItem item = listView1.SelectedItems[0];
@@ -593,13 +617,12 @@ namespace Picket
         }
         private void MoveWinningTicketToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            moveWinningTicketToolStripMenuItem.Checked = moveWinningTicketToolStripMenuItem.Checked ? false : true;
-            if (listView2.Items.Count > 0 || listView3.Items.Count > 0)
+            if (listView2.Items.Count > 0)
             {
-                DialogResult dialogResult = MessageBox.Show("Switching this setting will cause current winners to be cleared.\r\nContinue?", "Picket Warning", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Switching this setting will cause current winners to be cleared.\r\nMoved tickets can be put back in the Pool if available.\r\nContinue?", "Picket Warning", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
-                    if (listView2.Items.Count > 0)
+                    if (listView2.Items.Count > 0 && moveWinningTicketToolStripMenuItem.Checked == true)
                     {
                         dialogResult = MessageBox.Show("Move picked tickets back to original list?", "Picket Warning", MessageBoxButtons.YesNo);
                         if (dialogResult == DialogResult.Yes)
@@ -611,8 +634,13 @@ namespace Picket
                             }
                         }
                     }
-                    listView3.Items.Clear();
+                    listView2.Items.Clear();
+                    moveWinningTicketToolStripMenuItem.Checked = moveWinningTicketToolStripMenuItem.Checked ? false : true;
                 }
+            }
+            else
+            {
+                    moveWinningTicketToolStripMenuItem.Checked = moveWinningTicketToolStripMenuItem.Checked ? false : true;
             }
             UpdateEntryCount();
             ListViewSetGUI();
@@ -632,7 +660,6 @@ namespace Picket
         private void ClearWinnersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             listView2.Items.Clear();
-            listView3.Items.Clear();
             UpdateEntryCount();
         }
         private void AdvancedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -666,36 +693,9 @@ namespace Picket
             DialogResult result = saveFileDialog1.ShowDialog();
             if (result != DialogResult.Cancel)
             {
-                string write = "";
-                FileStream fs = File.Open(saveFileDialog1.FileName, FileMode.Create);
-
-                write += "[listView1]\r\n";
-                foreach (ListViewItem item in listView1.Items)
-                {
-                    int cnt = int.Parse(item.SubItems[1].Text);
-                    write += $"Entry={item.Text}|{item.BackColor}|{item.ForeColor}|{cnt}\r\n";
-                }
-                write += "[listView2]\r\n";
-                foreach (ListViewItem item in listView2.Items)
-                {
-                    int cnt = int.Parse(item.SubItems[1].Text);
-                    write += $"Entry={item.Text}|{item.BackColor}|{item.ForeColor}|{cnt}\r\n";
-                }
-                write += "[listView3]\r\n";
-                foreach (ListViewItem item in listView3.Items)
-                {
-                    int cnt = int.Parse(item.SubItems[1].Text);
-                    write += $"Entry={item.Text}|{item.BackColor}|{item.ForeColor}|{cnt}\r\n";
-                }
-                write += "[Plugin]\r\n";
-                write += Instance.Assembly.FullName.Replace(',','|') + "\r\n";
-
-                byte[] bytes = Encoding.ASCII.GetBytes(write);
-                fs.Write(bytes, 0, bytes.Length);
-                fs.Close();
+                SaveSessionFile(saveFileDialog1.FileName);
             }
         }
-
         private void RestoreSessionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.InitialDirectory = Environment.CurrentDirectory;
@@ -703,32 +703,23 @@ namespace Picket
             DialogResult result = openFileDialog1.ShowDialog();
             if (result != DialogResult.Cancel)
             {
-                ClearAllToolStripMenuItem_Click(null, null);
-                string text = File.ReadAllText(openFileDialog1.FileName);
-                text = text.Replace("\r\n", "`");
-                List<string> textList = text.Split('`').ToList<string>();
-                int loc1 = textList.FindIndex(x => x == "[listView1]");
-                int loc2 = textList.FindIndex(x => x == "[listView2]");
-                int loc3 = textList.FindIndex(x => x == "[listView3]");
-                int loc4 = textList.FindIndex(x => x == "[Plugin]");
+                RestoreSessionFile(openFileDialog1.FileName);
+            }
+        }
+        private void AutoSaveRestoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (sender != null) { autoSaveRestoreToolStripMenuItem.Checked = autoSaveRestoreToolStripMenuItem.Checked ? false : true; }
 
-                for (int i = loc1 + 1; i < loc2; i++)
+            if (autoSaveRestoreToolStripMenuItem.Checked)
+            {
+                SaveSessionFile(SessionFile);
+            }
+            else
+            {
+                if (File.Exists(SessionFile))
                 {
-                    string[] textArr = textList[i].Replace("Entry=", "").Replace("Color ", "").Replace("[", "").Replace("]", "").Split('|');
-                    ListView1_Update_Ticket(TicketUpdateType.Update, textArr[0], int.Parse(textArr[3]), Color.FromName(textArr[1]), Color.FromName(textArr[2]));
+                    File.Delete(SessionFile);
                 }
-                for (int i = loc2 + 1; i < loc3; i++)
-                {
-                    string[] textArr = textList[i].Replace("Entry=", "").Replace("Color ", "").Replace("[", "").Replace("]", "").Split('|');
-                    listView2.Items.Add(new ListViewItem(new string[] { textArr[0], textArr[3] }, 0, Color.FromName(textArr[2]), Color.FromName(textArr[1]), default));
-                }
-                for (int i = loc3 + 1; i < loc4; i++)
-                {
-                    string[] textArr = textList[i].Replace("Entry=", "").Replace("Color ", "").Replace("[", "").Replace("]", "").Split('|');
-                    listView3.Items.Add(new ListViewItem(new string[] { textArr[0], textArr[3] }, 0, Color.FromName(textArr[2]), Color.FromName(textArr[1]), default));
-                }
-                ToolStripItem tsi = pluginToolStripMenuItem.DropDownItems.Find(textList[loc4 + 1].Split('|')[0], true)[0];
-                tsi.PerformClick();
             }
         }
         #endregion
@@ -839,27 +830,30 @@ namespace Picket
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            AutoSaveRestoreToolStripMenuItem_Click(null, null);
+
             ClearPluginToolStripMenuItem_Click(null, null);
         }
         private void ListViewSetGUI()
         {
             if (!moveWinningTicketToolStripMenuItem.Checked)
             {
-                listView2.Visible = false;
-                button8.Visible = false;
-                listView3.Visible = true;
-                button9.Visible = true;
+                button8.Text = "Clear Winners";
                 labelWinList.Text = "Winning List:";
             }
             else
             {
-                listView2.Visible = true;
-                button8.Visible = true;
-                listView3.Visible = false;
-                button9.Visible = false;
+                button8.Text = "Move Back";
                 labelWinList.Text = "Winning Pot:";
             }
-            this.Refresh();
+        }
+        private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            Instance.ToolProperties.AnimationSpeed.SetValue(Instance.ToolPropertiesObj, (float)numericUpDown3.Value);
+        }
+        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            Instance.ToolProperties.AnimationSpeedBoost.SetValue(Instance.ToolPropertiesObj, checkBox2.Checked);
         }
         #endregion
 
@@ -883,23 +877,97 @@ namespace Picket
         {
             return Math.Abs(color1.GetBrightness() - color2.GetBrightness()) >= 0.5f;
         }
+        private void SaveSessionFile(string file)
+        {
+            string write = "";
+            FileStream fs = File.Open(file, FileMode.Create);
+
+            write += "[listView1]\r\n";
+            foreach (ListViewItem item in listView1.Items)
+            {
+                int cnt = int.Parse(item.SubItems[1].Text);
+                write += $"Entry={item.Text}|{item.BackColor.ToArgb().ToString()}|{item.ForeColor.ToArgb().ToString()}|{cnt}\r\n";
+            }
+            write += "[listView2]\r\n";
+            foreach (ListViewItem item in listView2.Items)
+            {
+                int cnt = int.Parse(item.SubItems[1].Text);
+                write += $"Entry={item.Text}|{item.BackColor.ToArgb().ToString()}|{item.ForeColor.ToArgb().ToString()}|{cnt}\r\n";
+            }
+            write += "[Plugin]\r\n";
+            try { write += $"Name={Instance.Assembly.FullName.Replace(',', '|')}\r\n"; }
+            catch { write += "Name=null\r\n"; }
+            write += "[Advanced]\r\n";
+            write += $"UseAdvanced={advancedToolStripMenuItem.Checked}\r\n";
+            write += $"Auto={checkBox1.Checked}\r\n";
+            string autoRadio = radioButton1.Checked ? "All" : "Cnt";
+            write += $"AutoRadio={autoRadio}\r\n";
+            write += $"AutoCount={numericUpDown2.Value}\r\n";
+            write += $"PickType={trackBar1.Value}\r\n";
+            write += $"Speed={numericUpDown3.Value}\r\n";
+            write += $"Boost={checkBox2.Checked}\r\n";
+            write += $"MoveTicket={moveWinningTicketToolStripMenuItem.Checked}\r\n";
+            write += $"RemoveWinner={removeWinnerFromPoolToolStripMenuItem.Checked}\r\n";
+
+            byte[] bytes = Encoding.ASCII.GetBytes(write);
+            fs.Write(bytes, 0, bytes.Length);
+            fs.Close();
+        }
+        private void RestoreSessionFile(string file)
+        {
+            string text = File.ReadAllText(file);
+            text = text.Replace("\r\n", "`");
+            List<string> textList = text.Split('`').ToList<string>();
+            int loc1 = textList.FindIndex(x => x == "[listView1]");
+            int loc2 = textList.FindIndex(x => x == "[listView2]");
+            int loc3 = textList.FindIndex(x => x == "[Plugin]");
+            int loc4 = textList.FindIndex(x => x == "[Advanced]");
+
+            for (int i = loc4 + 1; i < textList.Count - 1; i++)
+            {
+                try
+                {
+                    string[] entry = textList[i].Split('=');
+                    if (entry[0] == "UseAdvanced") { advancedToolStripMenuItem.Checked = bool.Parse(entry[1]); }
+                    else if (entry[0] == "Auto") { checkBox1.Checked = bool.Parse(entry[1]); }
+                    else if (entry[0] == "AutoRadio") { if (entry[1] == "All") { radioButton1.Checked = true; } else { radioButton2.Checked = true; } }
+                    else if (entry[0] == "AutoCount") { numericUpDown2.Value = decimal.Parse(entry[1]); }
+                    else if (entry[0] == "PickType") { trackBar1.Value = int.Parse(entry[1]); }
+                    else if (entry[0] == "Speed") { numericUpDown3.Value = decimal.Parse(entry[1]); }
+                    else if (entry[0] == "Boost") { checkBox2.Checked = bool.Parse(entry[1]); }
+                    else if (entry[0] == "MoveTicket") { moveWinningTicketToolStripMenuItem.Checked = bool.Parse(entry[1]); }
+                    else if (entry[0] == "RemoveWinner") { removeWinnerFromPoolToolStripMenuItem.Checked = bool.Parse(entry[1]); }
+                }
+                catch { }
+            }
+            TrackBar1_Scroll(null, null);
+            ListViewSetGUI();
+            AdvancedToolStripMenuItem_Click(null, null);
+
+            ClearAllToolStripMenuItem_Click(null, null);
+            for (int i = loc1 + 1; i < loc2; i++)
+            {
+                string[] textArr = textList[i].Replace("Entry=", "").Replace("Color ", "").Replace("[", "").Replace("]", "").Split('|');
+                ListView1_Update_Ticket(TicketUpdateType.Update, textArr[0], int.Parse(textArr[3]), Color.FromArgb(int.Parse(textArr[1])), Color.FromArgb(int.Parse(textArr[2])));
+            }
+
+            for (int i = loc2 + 1; i < loc3; i++)
+            {
+                string[] textArr = textList[i].Replace("Entry=", "").Replace("Color ", "").Replace("[", "").Replace("]", "").Split('|');
+                listView2.Items.Add(new ListViewItem(new string[] { textArr[0], textArr[3] }, 0, Color.FromArgb(int.Parse(textArr[2])), Color.FromArgb(int.Parse(textArr[1])), default));
+            }
+            string plugin = textList[loc3 + 1].Replace("Name=", "").Split('|')[0];
+            if (plugin != "null")
+            {
+                try
+                {
+                    ToolStripItem tsi = pluginToolStripMenuItem.DropDownItems.Find(plugin, true)[0];
+                    tsi.PerformClick();
+                }
+                catch { }
+            }
+        }
         #endregion
-
-        private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
-        {
-            Instance.ToolProperties.AnimationSpeed.SetValue(Instance.ToolPropertiesObj, (float)numericUpDown3.Value);
-        }
-
-        private void CheckBox2_CheckedChanged(object sender, EventArgs e)
-        {
-            Instance.ToolProperties.AnimationSpeedBoost.SetValue(Instance.ToolPropertiesObj, checkBox2.Checked);
-        }
-
-        private void Button10_Click(object sender, EventArgs e)
-        {
-            numericUpDown3.Value = (decimal)0.080;
-            checkBox2.Checked = true;
-        }
     }
     public enum TicketUpdateType
     {
