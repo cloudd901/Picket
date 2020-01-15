@@ -58,8 +58,8 @@ The Speed option will adjust the animation speed.
 - Newer CPUs will draw the animation quicker and you may need to lower the speed.
 
 The Boost option allows for better dynamic speeds.
-- Currently only available for the MagicWheel plugin.
-- It will slightly boost the initial speed of the animation while until it is 40% complete.
+- As of this note; Boost is only available for the MagicWheel plugin.
+- It will slightly boost the initial speed of the animation until it is 40% complete.
 - Helps the wheel animation to be slightly more random as if being spun by a person.
 - Turn off to have a basic steady speed reduction of the animation.
 
