@@ -14,12 +14,12 @@ namespace Picket
 {
     public partial class Form1 : Form
     {
-        readonly object _lock1 = new object();
-        readonly object _lock2 = new object();
-        private bool StopCalledFlag { get; set; } = false;
-        private Thread ActionThread { get; set; }
-        private Timer ReverseListTimer { get; set; }
-        private PowerType PT { get; set; } = PowerType.Random;
+        readonly object _lock1 = new object();// Multithread locking
+        readonly object _lock2 = new object();// Multithread locking
+        private bool StopCalledFlag { get; set; } = false;// Flag to prevent picks when stop is called.
+        private Thread ActionThread { get; set; }// Animation/Pick thread to keep UI responsive.
+        private Timer ReverseListTimer { get; set; }// Global timer to update list separate from animation.
+        private PowerType PT { get; set; } = PowerType.Random;// Easier readability using global variable.
         private MyReflection.ReflectionData Instance { get; set; }
         private List<AssemblyName> AssList { get; } = new List<AssemblyName>();
         private string SessionFile { get; } = Environment.CurrentDirectory + "\\session.pkt";
@@ -28,6 +28,7 @@ namespace Picket
         {
             InitializeComponent();
 
+            // Load all plugins into ToolStrip items.
             DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory() + @"\plugins\");
             di.GetFiles("*.dll");
             foreach (FileInfo f in di.GetFiles("*.dll"))
@@ -37,18 +38,25 @@ namespace Picket
                 pluginToolStripMenuItem.DropDownItems.Add(item);
             }
 
+            // Set Label and Button Text for winners.
             ListViewSetGUI();
+
+            // Show/Hide Advanced options GUI.
             AdvancedToolStripMenuItem_Click(null, null);
-            
+
+            // Set PowerType and Trackbar label.
             TrackBar1_Scroll(null, null);
+
+            // Set random color for button4.
             button4.BackColor = ColorRandom();
+
+            // Disabled Buttons not initially needed.
             ButtonStates(false);
-            label3.Parent = pluginBG;
-            label3.Update();
-            label8.Parent = pluginBG;
-            label8.Update();
+
+            // Update count above ListViews. (initially 0)
             UpdateEntryCount();
 
+            // Load previous session if SessionFile exists.
             if (File.Exists(SessionFile))
             {
                 autoSaveRestoreToolStripMenuItem.Checked = true;
@@ -114,7 +122,7 @@ namespace Picket
 
             UpdateEntryList();
 
-            Instance.Methods.Draw.Invoke(Instance.iRandomInstance, new object[] { 13, 4, 150 });
+            Instance.Methods.Draw.Invoke(Instance.iRandomInstance, new object[] { 15, 6, 150 });
         }// Load Assembly and initial settings.
         private void ButtonStates(bool state = true)
         {
@@ -126,7 +134,7 @@ namespace Picket
                 button6.Enabled = state;
             }//do not default enable
             button7.Enabled = state;
-        }
+        }// Disabled/Enable Buttons during processing.
         #endregion
 
         #region Events
@@ -146,7 +154,7 @@ namespace Picket
                 }
 
             }
-        }
+        }// Auto Spin event
         private void EventStopCall(object entry)
         {
             Invoke((MethodInvoker)delegate
@@ -159,7 +167,7 @@ namespace Picket
             StopEntryTimer.AutoReset = false;
             StopEntryTimer.Interval = 1000;
             StopEntryTimer.Start();
-        }
+        }// Calls DoEventAction as plugin animation ends then runs EventStopCallDelay
         private void EventStopCallDelay(object sender, ElapsedEventArgs e, object entry)
         {
             Invoke((MethodInvoker)delegate
@@ -172,7 +180,7 @@ namespace Picket
                 }
             });
             StopCalledFlag = false;
-        }
+        }// Code to run after animation ends AND DoEventAction is ran
         private void EventActionCall(object entry, string[] actionInfo)
         {
             if (!StopCalledFlag)
@@ -182,7 +190,7 @@ namespace Picket
                     DoEventAction(entry, actionInfo);
                 });
             }
-        }
+        }// Calls DoEventAction as plugin is animated
         private void DoEventAction(object entry, string[] actionInfo, int progressBar = -1)
         {
             ReverseListUpdateTimer_Set();
@@ -194,7 +202,7 @@ namespace Picket
                 label1.Refresh();
                 ProgressUpdate(actionInfo, progressBar);
             }
-        }
+        }// Update label with current selected entry
         public void MoveEntryEvent(object entry)
         {
             string name = GetPropValue(entry, "Name").ToString();
@@ -288,7 +296,7 @@ namespace Picket
                 item = listView.FindItemWithText(text, true, 0, false);
             }
             return item;
-        }
+        }// Preset settings to find ListView item
         private void ReverseListUpdateTimer_Set()
         {
             if (ReverseListTimer == null)
@@ -299,7 +307,7 @@ namespace Picket
                 ReverseListTimer.Interval = 200;
                 ReverseListTimer.Start();
             }
-        }
+        }// Timer used by DoEventAction
         private void ReverseListUpdateTimer_Clear()
         {
             if (ReverseListTimer != null)
@@ -332,7 +340,7 @@ namespace Picket
             
                 ReverseListUpdateTimer_Clear();
             }
-        }
+        }// Call ReverseUpdateEntryList
         private void ReverseUpdateEntryList()
         {
             var entryList = CallEntryList();
@@ -371,13 +379,13 @@ namespace Picket
                     TextBox1_TextChanged(null, null);
                 }
             }
-        }
+        }// Sends the Plugin EntryList to the ListView1 
         private dynamic CallEntryList()
         {
             if (Instance == null) { return null; }
             dynamic list = Instance.EntryList;
             return list;
-        }
+        }// Retrieve Plugin EntryList
         private void UpdateEntryCount()
         {
             int cnt1 = 0;
@@ -387,7 +395,7 @@ namespace Picket
 
             labelTktListCnt.Text = cnt1.ToString();
             labelWinListCnt.Text = cnt2.ToString();
-        }
+        }// Update count above ListViews
         private void UpdateEntryList()
         {
             UpdateEntryCount();
@@ -408,7 +416,7 @@ namespace Picket
                 }
                 Instance.Methods.Refresh.Invoke(Instance.iRandomInstance, nullObj);
             }
-        }
+        }// Calls UpdateEntryCount and sends ListView1 to the Plugin EntryList
         public object NewEntry(string s, Color c, int id = -1)
         {
             object e = Activator.CreateInstance(Instance.EntryType);
@@ -555,7 +563,7 @@ namespace Picket
             textBox1.Text = item.SubItems[0].Text;
             try { numericUpDown1.Value = int.Parse(item.SubItems[1].Text); } catch { }
             button4.BackColor = item.BackColor;
-        }
+        }// Edit Entry
         private void ListView1_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             ListViewColumnSorter columnSorter = (ListViewColumnSorter)listView1.ListViewItemSorter;
@@ -580,7 +588,7 @@ namespace Picket
             listView1.ListViewItemSorter = columnSorter;
             listView1.Sort();
             UpdateEntryList();
-        }
+        }// Sort Column
         #endregion
 
         #region ToolStrip Clicks
@@ -684,7 +692,7 @@ namespace Picket
                 MinimumSize = p;
                 MaximumSize = p;
             }
-        }
+        }// Show/Hide Advanced options GUI.
         private void SaveSessionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.InitialDirectory = Environment.CurrentDirectory;
@@ -751,7 +759,7 @@ namespace Picket
                 radioButton2.Enabled = false;
                 numericUpDown2.Enabled = false;
             }
-        }
+        }// Auto Pick
         private void ProgressUpdate(string[] info, int i = -1)
         {
             if (PT != PowerType.Infinite)
@@ -783,7 +791,7 @@ namespace Picket
                     }
                 }
             }
-        }
+        }// Progress bar algorithm 
         private void TextBox1_TextChanged(object sender, EventArgs e)
         {
             ListViewItem item = ListViewTryFindText(listView1, textBox1.Text);
@@ -827,13 +835,13 @@ namespace Picket
             { lbl_2.ForeColor = c1; PT = PowerType.Average; }
             else if (trackBar1.Value >= 0)
             { lbl_0.ForeColor = c1; PT = PowerType.Weak; }
-        }
+        }// Set PowerType and Trackbar label
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             AutoSaveRestoreToolStripMenuItem_Click(null, null);
 
             ClearPluginToolStripMenuItem_Click(null, null);
-        }
+        }// Self-Explainatory
         private void ListViewSetGUI()
         {
             if (!moveWinningTicketToolStripMenuItem.Checked)
@@ -846,37 +854,37 @@ namespace Picket
                 button8.Text = "Move Back";
                 labelWinList.Text = "Winning Pot:";
             }
-        }
+        }// Set Label and Button Text for winners
         private void NumericUpDown3_ValueChanged(object sender, EventArgs e)
         {
             Instance.ToolProperties.AnimationSpeed.SetValue(Instance.ToolPropertiesObj, (float)numericUpDown3.Value);
-        }
+        }// Animation Speed
         private void CheckBox2_CheckedChanged(object sender, EventArgs e)
         {
             Instance.ToolProperties.AnimationSpeedBoost.SetValue(Instance.ToolPropertiesObj, checkBox2.Checked);
-        }
+        }// Animation Boost
         #endregion
 
         #region Supporting Functions
         public object GetPropValue(object src, string propName)
         {
             return src.GetType().GetProperty(propName).GetValue(src, null);
-        }
+        }// Reflection help
         public void SetPropValue(object src, string propName, object value)
         {
             Type t = src.GetType();
             PropertyInfo p = t.GetProperty(propName);
             p.SetValue(src, value);
-        }
+        }// Reflection help
         private Color ColorRandom()
         {
             Random rnd = new Random();
             return Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
-        }
+        }// Random Color (same code from MagicWheel plugin)
         public bool IsReadable(Color color1, Color color2)
         {
             return Math.Abs(color1.GetBrightness() - color2.GetBrightness()) >= 0.5f;
-        }
+        }// Checks readability (same code from MagicWheel plugin)
         private void SaveSessionFile(string file)
         {
             string write = "";
@@ -912,7 +920,7 @@ namespace Picket
             byte[] bytes = Encoding.ASCII.GetBytes(write);
             fs.Write(bytes, 0, bytes.Length);
             fs.Close();
-        }
+        }// Save Picket session to file
         private void RestoreSessionFile(string file)
         {
             string text = File.ReadAllText(file);
@@ -966,7 +974,7 @@ namespace Picket
                 }
                 catch { }
             }
-        }
+        }// Restore Picket session from file
         #endregion
     }
     public enum TicketUpdateType
@@ -974,5 +982,5 @@ namespace Picket
         Add,
         Subtract,
         Update
-    }
+    }// Mainly used by ListView1_Update_Ticket for easier reading
 }

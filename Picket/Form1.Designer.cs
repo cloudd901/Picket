@@ -86,7 +86,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.pluginBG = new System.Windows.Forms.Label();
             this.labelTktListCnt = new System.Windows.Forms.Label();
             this.labelWinListCnt = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -102,12 +101,14 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.labelWinList = new System.Windows.Forms.Label();
+            this.pluginBG = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            this.pluginBG.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -296,7 +297,7 @@
             // aboutToolStripMenuItem1
             // 
             this.aboutToolStripMenuItem1.Name = "aboutToolStripMenuItem1";
-            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem1.Text = "About";
             this.aboutToolStripMenuItem1.Click += new System.EventHandler(this.AboutToolStripMenuItem1_Click);
             // 
@@ -528,7 +529,7 @@
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(39, 49);
+            this.label3.Location = new System.Drawing.Point(36, 40);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(259, 75);
             this.label3.TabIndex = 23;
@@ -657,15 +658,6 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(2, 256);
             this.label5.TabIndex = 35;
-            // 
-            // pluginBG
-            // 
-            this.pluginBG.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.pluginBG.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.pluginBG.Location = new System.Drawing.Point(0, 24);
-            this.pluginBG.Name = "pluginBG";
-            this.pluginBG.Size = new System.Drawing.Size(336, 315);
-            this.pluginBG.TabIndex = 36;
             // 
             // labelTktListCnt
             // 
@@ -848,13 +840,22 @@
             this.labelWinList.TabIndex = 25;
             this.labelWinList.Text = "Winning List:";
             // 
+            // pluginBG
+            // 
+            this.pluginBG.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.pluginBG.Controls.Add(this.label8);
+            this.pluginBG.Controls.Add(this.label3);
+            this.pluginBG.Location = new System.Drawing.Point(0, 23);
+            this.pluginBG.Name = "pluginBG";
+            this.pluginBG.Size = new System.Drawing.Size(336, 326);
+            this.pluginBG.TabIndex = 44;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(759, 348);
-            this.Controls.Add(this.label8);
             this.Controls.Add(this.labelWinListCnt);
             this.Controls.Add(this.labelTktListCnt);
             this.Controls.Add(this.label1);
@@ -864,7 +865,6 @@
             this.Controls.Add(this.button8);
             this.Controls.Add(this.labelWinList);
             this.Controls.Add(this.listView2);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -878,8 +878,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.pluginBG);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.pluginBG);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximumSize = new System.Drawing.Size(775, 387);
@@ -895,6 +895,8 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
+            this.pluginBG.ResumeLayout(false);
+            this.pluginBG.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -950,7 +952,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        public System.Windows.Forms.Label pluginBG;
         private System.Windows.Forms.ToolStripMenuItem removeWinnerFromPoolToolStripMenuItem;
         private System.Windows.Forms.Label labelTktListCnt;
         private System.Windows.Forms.Label labelWinListCnt;
@@ -974,6 +975,7 @@
         private System.Windows.Forms.Label labelWinList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem autoSaveRestoreToolStripMenuItem;
+        private System.Windows.Forms.Panel pluginBG;
     }
 }
 
