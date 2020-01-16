@@ -52,10 +52,30 @@ The pick strength slider allows you to control how long the picking process will
 - Infinite will allow the picking process to continue until it is manually stopped.
     - Stopping the pick on Infinite will still choose a random ticket and will not immediately stop.
 
+The Speed option will adjust the animation speed.
+- Default is 0.080
+- Animation processor based since they are drawn by the CPU.
+- Newer CPUs will draw the animation quicker and you may need to lower the speed.
+
+The Boost option allows for better dynamic speeds.
+- As of this note; Boost is only available for the MagicWheel plugin.
+- It will slightly boost the initial speed of the animation until it is 40% complete.
+- Helps the wheel animation to be slightly more random as if being spun by a person.
+- Turn off to have a basic steady speed reduction of the animation.
+
 The Shuffle button will manually mix up the list so that tickets are not clumped together.
 - The internal plugin list will first be shuffled.
 - The GUI list will be updated accordingly.
 - If shuffled, the internal list will be randomized.
+
+<h4>Saving</h4>
+The File menu allows for saving your session.
+
+- You can save your session as a pkt file (picket file).
+- You can restor your pkt file session.
+- You can set an auto save/restore session.
+   - The auto save file is 'session.pkt' in the current directory.
+
 <br>
 <br>
 Reflection training
